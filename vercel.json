@@ -3,10 +3,11 @@
   "outputDirectory": "client/dist",
   "installCommand": "npm install && cd client && npm install",
   "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/[...slug]" },
     { "source": "/((?!api/).*)", "destination": "/index.html" }
   ],
   "functions": {
-    "api/index.js": {
+    "api/[...slug].js": {
       "maxDuration": 30,
       "memory": 2048
     }
