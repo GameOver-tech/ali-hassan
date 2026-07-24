@@ -68,9 +68,9 @@ export default function Contact() {
                 </div>
               </SectionReveal>
             </div>
-            <div className="lg:col-span-2">
+            <div className="lg:col-span-2 flex flex-col items-center mx-auto w-full max-w-lg lg:max-w-none lg:mx-0">
               <SectionReveal type="right" delay={0.2}>
-                <div className="space-y-3 sm:space-y-4">
+                <div className="grid grid-cols-2 sm:grid-cols-1 gap-3 sm:gap-4 w-full">
                   {contactItems.map((item, i) => (
                     <motion.div key={i} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} transition={{ duration: 0.25 }}>
                       <div className="group flex items-center gap-3 sm:gap-4 p-4 rounded-2xl border border-white/[0.06] bg-[#111827] hover:border-accent/15 hover:shadow-[0_4px_30px_rgba(0,240,255,0.06)] transition-all duration-300 min-h-[68px] overflow-hidden">
