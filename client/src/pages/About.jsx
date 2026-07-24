@@ -266,7 +266,7 @@ export default function About() {
               <motion.div variants={itemVariants} className="flex flex-wrap justify-center lg:justify-start gap-4 mt-8 sm:mt-10">
                 {aboutData?.cv_url && (
                   <a href={aboutData.cv_url} download
-                    className="group inline-flex items-center gap-3 px-8 min-h-[54px] bg-[#FF8C42] text-white font-semibold text-sm sm:text-base rounded-full shadow-lg shadow-[#FF8C42]/25 hover:shadow-xl hover:shadow-[#FF8C42]/40 hover:brightness-110 hover:scale-[1.02] active:scale-[0.97] transition-all duration-300">
+                    className="group inline-flex items-center gap-3 px-8 min-h-[54px] bg-gradient-to-r from-accent to-accent-neural text-background font-bold text-sm sm:text-base rounded-full shadow-lg shadow-accent/25 hover:shadow-xl hover:shadow-accent/40 hover:brightness-110 hover:scale-[1.02] active:scale-[0.97] transition-all duration-300">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="group-hover:translate-y-0.5 transition-transform duration-300">
                       <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                       <polyline points="7 10 12 15 17 10" />
