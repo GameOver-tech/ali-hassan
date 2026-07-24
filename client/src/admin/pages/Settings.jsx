@@ -4,11 +4,25 @@ import { showToast } from '../../components/ui/Toast'
 import { refreshSite } from '../../utils/refresh'
 
 const defaultSectionTitles = {
+  home_title: 'Ali Hassan | AI Engineer',
+  home_description: 'AI Engineer building production-grade AI systems, web applications, and intelligent software.',
   featured_projects: 'Featured Projects',
+  portfolio_subtitle: 'Portfolio',
+  portfolio_heading: 'Selected',
+  portfolio_heading_highlight: 'Projects',
+  projects_view_all: 'View All Projects',
   services: 'Services & Expertise',
+  services_subtitle: 'Expertise',
+  services_heading: 'Services &',
+  services_heading_highlight: 'Capabilities',
   testimonials: 'What Clients Say',
+  testimonials_subtitle: 'Testimonials',
+  testimonials_heading: 'Client',
+  testimonials_heading_highlight: 'Feedback',
   cta_title: "Let's Create Something Amazing",
-  cta_subtitle: 'Ready to elevate your brand?'
+  cta_subtitle: 'Ready to elevate your brand?',
+  cta_button: 'Start a Project',
+  cta_button_secondary: 'View Portfolio',
 }
 
 export default function AdminSettings() {
@@ -30,7 +44,13 @@ export default function AdminSettings() {
     setForm({ ...form, section_titles: JSON.stringify({ ...current, [key]: value }) })
   }
 
-  const sectionTitleFields = ['featured_projects', 'services', 'testimonials', 'cta_title', 'cta_subtitle']
+  const sectionTitleFields = [
+    'home_title', 'home_description',
+    'featured_projects', 'portfolio_subtitle', 'portfolio_heading', 'portfolio_heading_highlight', 'projects_view_all',
+    'services', 'services_subtitle', 'services_heading', 'services_heading_highlight',
+    'testimonials', 'testimonials_subtitle', 'testimonials_heading', 'testimonials_heading_highlight',
+    'cta_title', 'cta_subtitle', 'cta_button', 'cta_button_secondary',
+  ]
 
   useEffect(() => { loadSettings() }, [])
 

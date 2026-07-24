@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { FaWhatsapp, FaRobot } from 'react-icons/fa'
+import { FaWhatsapp } from 'react-icons/fa'
 import { HiArrowUp } from 'react-icons/hi'
 import { useApp } from '../../context/AppContext'
 
 export default function FloatingButtons() {
   const { siteSettings } = useApp()
   const [showScroll, setShowScroll] = useState(false)
-  const [chatbotOpen, setChatbotOpen] = useState(false)
 
   useEffect(() => {
     const h = () => setShowScroll(window.scrollY > 400)
@@ -15,21 +14,8 @@ export default function FloatingButtons() {
     return () => window.removeEventListener('scroll', h)
   }, [])
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setChatbotOpen(!!window.__chatbotOpen)
-    }, 100)
-    return () => clearInterval(interval)
-  }, [])
-
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' })
   const openWA = () => { const wa = siteSettings?.whatsapp || '923102850365'; window.open(`https://wa.me/${wa}`, '_blank') }
-  const openChatbot = () => {
-    const btn = document.getElementById('chatbot-toggle')
-    if (btn) btn.click()
-  }
-
-  if (chatbotOpen) return null
 
   return (
     <>
@@ -43,11 +29,6 @@ export default function FloatingButtons() {
             <HiArrowUp size={20} />
           </button>
         )}
-        <button onClick={openChatbot}
-          className="flex flex-col items-center gap-0.5 min-w-[44px] justify-center text-accent transition-colors active:scale-90"
-          aria-label="Open AI Assistant">
-          <FaRobot size={20} />
-        </button>
         <button onClick={openWA}
           className="flex flex-col items-center gap-0.5 min-w-[44px] justify-center text-[#25D366] transition-colors active:scale-90"
           aria-label="Contact via WhatsApp">
@@ -75,13 +56,6 @@ export default function FloatingButtons() {
             </motion.button>
           )}
         </AnimatePresence>
-
-        {/* Chatbot toggle */}
-        <button onClick={openChatbot}
-          className="w-12 h-12 rounded-full bg-accent flex items-center justify-center text-background shadow-[0_0_20px_rgba(0,240,255,0.3)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_40px_rgba(0,240,255,0.5)] active:scale-90"
-          aria-label="Open AI Assistant">
-          <FaRobot size={18} />
-        </button>
 
         {/* WhatsApp */}
         <button onClick={openWA}

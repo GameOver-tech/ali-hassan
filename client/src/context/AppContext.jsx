@@ -29,15 +29,14 @@ export function AppProvider({ children }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const fetched = useRef(false)
 
-  const fetchSiteData = useCallback(async () => {
-    // Skip massive data fetch on admin routes — admin pages fetch their own data
-    if (isAdminRoute(location.pathname)) return
+  // The actual data-fetching logic — no route guard, so both initial load
+  // and admin-triggered refreshSite() always fetch fresh data
+  const safeSingle = useCallback(async (table) => {
+    const { data } = await supabase.from(table).select('*').limit(1).maybeSingle()
+    return data || null
+  }, [])
 
-    const safeSingle = async (table) => {
-      const { data } = await supabase.from(table).select('*').limit(1).maybeSingle()
-      return data || null
-    }
-
+  const loadAllData = useCallback(async () => {
     const settingsRes = await safeSingle('settings')
     const heroRes = await safeSingle('hero')
     const aboutRes = await safeSingle('about')
@@ -72,23 +71,29 @@ export function AppProvider({ children }) {
     if (faqsRes) setFAQs(faqsRes)
     if (certsRes) setCertifications(certsRes)
     if (processStepsRes) setProcessSteps(processStepsRes)
-  }, [location.pathname])
+  }, [safeSingle])
+
+  // Stable ref that loadAllData depends on only once — no pathname dep
+  const loadAllDataRef = useRef(loadAllData)
+  loadAllDataRef.current = loadAllData
 
   const refetch = useCallback(async () => {
     setRefreshing(true)
-    await fetchSiteData()
+    await loadAllDataRef.current()
     setRefreshing(false)
-  }, [fetchSiteData])
+  }, [])
 
+  // Initial load — only on public routes, only once
   useEffect(() => {
-    // Only fetch on non-admin routes, and only once
     if (!isAdminRoute(location.pathname) && !fetched.current) {
       fetched.current = true
-      fetchSiteData().finally(() => setLoading(false))
+      loadAllData().finally(() => setLoading(false))
     } else if (isAdminRoute(location.pathname)) {
       setLoading(false)
     }
-  }, [fetchSiteData, location.pathname])
+    // Intentionally run only on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   // Expose refetch globally for admin pages to trigger frontend refresh
   useEffect(() => {
