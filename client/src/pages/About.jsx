@@ -73,17 +73,28 @@ function GlassCard({ children, className = '' }) {
 function ProfileImage({ photoUrl }) {
   return (
     <div className="relative mx-auto w-64 h-64 sm:w-80 sm:h-80 lg:w-96 lg:h-96">
-      {/* Subtle glow */}
-      <motion.div className="absolute -inset-6 rounded-2xl bg-accent/5 blur-[80px]" animate={{ scale: [1, 1.08, 1] }} transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }} />
-      {/* Image card — consistently rounded, not circular */}
-      <div className="relative h-full w-full overflow-hidden rounded-2xl border border-white/[0.08] bg-bg-surface shadow-elevated">
-        {photoUrl ? <img src={photoUrl} alt="Ali Hassan" className="h-full w-full object-cover transition-transform duration-700 hover:scale-105" />
+      {/* Animated gradient ring */}
+      <motion.div className="absolute -inset-5 rounded-2xl opacity-30 blur-[60px]"
+        style={{ background: 'linear-gradient(135deg, #00F0FF, #7C3AED, #FF3B6F)' }}
+        animate={{ rotate: [0, 360] }}
+        transition={{ duration: 10, repeat: Infinity, ease: 'linear' }} />
+      {/* Secondary glow */}
+      <motion.div className="absolute -inset-3 rounded-2xl bg-accent/10 blur-[40px]"
+        animate={{ scale: [1, 1.06, 1] }}
+        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }} />
+      {/* Image card */}
+      <div className="relative h-full w-full overflow-hidden rounded-2xl border-2 border-white/[0.08] bg-bg-surface shadow-2xl shadow-black/50">
+        <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent z-10" />
+        {photoUrl ? <img src={photoUrl} alt="Ali Hassan" className="h-full w-full object-cover transition-all duration-700 hover:scale-110" />
           : <div className="flex h-full w-full items-center justify-center text-5xl sm:text-7xl font-heading font-bold text-gradient">AH</div>}
       </div>
       {/* Floating badge */}
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6, duration: 0.5 }}
-        className="absolute -bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-2 rounded-full bg-[#0d1117]/90 backdrop-blur-md border border-white/[0.08] px-4 py-2 shadow-lg">
-        <span className="w-2 h-2 rounded-full bg-[#22C55E] animate-pulse" />
+        className="absolute -bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-2 rounded-full bg-background/90 backdrop-blur-md border border-white/[0.12] px-4 py-2 shadow-lg shadow-accent/10">
+        <span className="relative flex h-2.5 w-2.5">
+          <span className="absolute inset-0 rounded-full bg-[#22C55E] animate-ping opacity-60" />
+          <span className="relative rounded-full bg-[#22C55E] w-2.5 h-2.5" />
+        </span>
         <span className="text-xs font-medium text-white whitespace-nowrap">Available for Work</span>
       </motion.div>
     </div>
@@ -273,23 +284,29 @@ export default function About() {
       <StatsBar stats={stats} />
 
       {/* ── Mission & Vision ── */}
-      <section className="py-12 sm:py-20 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-accent/[0.015] to-transparent pointer-events-none" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-16 sm:py-24 relative overflow-hidden">
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-accent/[0.015] to-transparent pointer-events-none" />
+          <motion.div className="absolute -top-40 -right-40 w-[500px] h-[500px] rounded-full bg-accent/3 blur-[120px]"
+            animate={{ scale: [1, 1.2, 1], rotate: [0, 20, 0] }}
+            transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }} />
+        </div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}
-            className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+            className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
             {[
               { icon: FiTarget, title: content.about_mission_title || 'My Mission', desc: aboutData?.mission || content.about_mission_fallback || 'To build intelligent systems that empower businesses.' },
               { icon: FiEye, title: content.about_vision_title || 'My Vision', desc: aboutData?.vision || content.about_vision_fallback || 'To be at the forefront of AI innovation.' },
             ].map((item, i) => (
               <motion.div key={i} variants={scaleIn}>
-                <GlassCard className="p-6 sm:p-8 group">
-                  <motion.div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-accent/10 flex items-center justify-center mb-4 sm:mb-5 shadow-[0_0_16px_rgba(0,240,255,0.08)]"
-                    whileHover={{ scale: 1.1, rotate: [0, -8, 8, 0] }} transition={{ duration: 0.4 }}>
-                    <item.icon className="text-accent" size={20} />
+                <GlassCard className="p-8 sm:p-10 h-full group relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-accent/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl group-hover:bg-accent/10 transition-all duration-700" />
+                  <motion.div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-accent/20 to-accent-neural/10 flex items-center justify-center mb-5 sm:mb-6 shadow-lg shadow-accent/5 group-hover:shadow-accent/15 transition-all duration-500"
+                    whileHover={{ scale: 1.1, rotate: [0, -10, 10, 0] }} transition={{ duration: 0.4 }}>
+                    <item.icon className="text-accent" size={22} />
                   </motion.div>
-                  <h3 className="text-base sm:text-lg font-heading font-semibold text-text-primary mb-2 sm:mb-3">{item.title}</h3>
-                  <p className="leading-relaxed text-sm sm:text-base text-text-muted">{item.desc}</p>
+                  <h3 className="text-lg sm:text-xl font-heading font-semibold text-text-primary mb-3 sm:mb-4">{item.title}</h3>
+                  <p className="leading-relaxed text-sm sm:text-base text-text-muted leading-8">{item.desc}</p>
                 </GlassCard>
               </motion.div>
             ))}
