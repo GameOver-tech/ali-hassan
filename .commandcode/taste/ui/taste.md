@@ -1,4 +1,6 @@
 # ui
+
+- Admin-only fields (status flags like "Active", ordering numbers like "Order", file management status like "File") must be strictly segregated from public-facing views. The public user should never see raw backend administration controls or database fields. Any certificate/document/public viewer page should display only presentation-relevant metadata (title, issuer, image, dates, credential link, description) in a polished, professional layout — never exposing admin CRUD fields to site visitors. Confidence: 0.85
 - Use a dark "Neural Core" robotics theme with deep black background (#080A10), robot-eye cyan accent (#00F0FF), neural violet (#7C3AED), energy coral (#FF3B6F), and system green (#00E676) for status indicators. Confidence: 0.85
 
 - For profile/hero images, switch shape responsively: circle (`rounded-full`) on mobile viewports and rounded rectangle (`lg:rounded-3xl`/`lg:rounded-2xl`) on desktop (≥1024px). All decorative rings, glow layers, and container borders should follow the same responsive radius pattern so the entire composition stays visually consistent at every breakpoint. Confidence: 0.80

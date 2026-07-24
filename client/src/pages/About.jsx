@@ -249,9 +249,15 @@ export default function About() {
               </motion.p>
               <motion.div variants={itemVariants} className="flex flex-wrap justify-center lg:justify-start gap-3 mt-6 sm:mt-8">
                 {aboutData?.cv_url && (
-                  <a href={aboutData.cv_url} target="_blank" rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-6 min-h-[48px] bg-accent text-background font-semibold rounded-full shadow-[0_0_20px_rgba(0,240,255,0.25)] hover:shadow-[0_0_40px_rgba(0,240,255,0.4)] transition-all duration-300">
-                    <FiDownload size={16} /> <span>{content.about_cv_button || 'Download CV'}</span>
+                  <a href={aboutData.cv_url} download
+                    className="group relative inline-flex items-center gap-3 px-8 min-h-[52px] bg-gradient-to-r from-accent to-accent-neural text-background font-semibold rounded-full shadow-[0_0_25px_rgba(0,240,255,0.3)] hover:shadow-[0_0_50px_rgba(0,240,255,0.5)] transition-all duration-500 overflow-hidden active:scale-[0.97]">
+                    {/* Animated background shimmer */}
+                    <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
+                    {/* Icon with bounce */}
+                    <span className="relative flex items-center justify-center w-8 h-8 rounded-full bg-background/20 group-hover:bg-background/10 transition-colors">
+                      <FiDownload size={16} className="group-hover:animate-bounce" />
+                    </span>
+                    <span className="relative">{content.about_cv_button || 'Download Resume'}</span>
                   </a>
                 )}
               </motion.div>
