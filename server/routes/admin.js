@@ -76,12 +76,31 @@ function singleUpsert(table, schema) {
   const middlewares = schema ? [validate(schema)] : []
   return [...middlewares, async (req, res) => {
     try {
-      const { data, error } = await supabase
+      // First get the actual existing row (there may be duplicates)
+      const { data: existing } = await supabase
         .from(table)
-        .upsert({ ...req.body, updated_at: new Date() })
-        .select()
-      if (error) return res.status(400).json({ error: error.message })
-      res.json(data)
+        .select('id')
+        .limit(1)
+        .maybeSingle()
+
+      let result
+      if (existing) {
+        // Update the actual existing row by its real ID
+        result = await supabase
+          .from(table)
+          .update({ ...req.body, updated_at: new Date() })
+          .eq('id', existing.id)
+          .select()
+      } else {
+        // No row exists — insert fresh
+        result = await supabase
+          .from(table)
+          .insert({ ...req.body, updated_at: new Date() })
+          .select()
+      }
+
+      if (result.error) return res.status(400).json({ error: result.error.message })
+      res.json(result.data)
     } catch (err) {
       res.status(500).json({ error: err.message })
     }
