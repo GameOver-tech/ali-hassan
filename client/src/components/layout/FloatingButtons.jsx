@@ -8,11 +8,18 @@ export default function FloatingButtons() {
   const { siteSettings } = useApp()
   const [showScroll, setShowScroll] = useState(false)
   const [chatbotOpen, setChatbotOpen] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   useEffect(() => {
     const h = () => setShowScroll(window.scrollY > 400)
     window.addEventListener('scroll', h, { passive: true })
     return () => window.removeEventListener('scroll', h)
+  }, [])
+
+  // Poll mobile sidebar open state so floating buttons hide when sidebar is active
+  useEffect(() => {
+    const interval = setInterval(() => { setSidebarOpen(document.body.classList.contains('no-scroll')) }, 200)
+    return () => clearInterval(interval)
   }, [])
 
   // Poll chatbot open state so we can hide when sidebar is open
@@ -21,6 +28,8 @@ export default function FloatingButtons() {
     return () => clearInterval(interval)
   }, [])
 
+  const hideMobile = sidebarOpen
+
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' })
   const openWA = () => { const wa = siteSettings?.whatsapp || '923102850365'; window.open(`https://wa.me/${wa}`, '_blank') }
   const openChatbot = () => { const btn = document.getElementById('chatbot-toggle'); if (btn) btn.click() }
@@ -28,7 +37,7 @@ export default function FloatingButtons() {
   return (
     <>
       {/* Mobile: floating column on the right (same as desktop) */}
-      <div className="sm:hidden fixed flex flex-col items-center gap-3 z-[999]"
+      <div className={`sm:hidden fixed flex flex-col items-center gap-3 z-[999] ${hideMobile ? 'hidden' : ''}`}
         style={{ bottom: 'max(24px, calc(24px + env(safe-area-inset-bottom, 0px)))', right: 'max(16px, calc(16px + env(safe-area-inset-right, 0px)))' }}>
         {/* Scroll to top — top */}
         <AnimatePresence>
