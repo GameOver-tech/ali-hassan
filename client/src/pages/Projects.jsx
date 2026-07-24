@@ -54,15 +54,15 @@ export default function Projects() {
             <p className="text-sm sm:text-lg leading-8 text-text-muted">A selection of AI systems, applications, and technical solutions I've built.</p>
           </div></SectionReveal>
 
-          <SectionReveal type="blur"><motion.div className="mb-8 sm:mb-12 flex flex-col items-center justify-between gap-4 sm:gap-6 rounded-2xl border border-border-subtle bg-[#111827]/60 p-4 sm:p-5 md:flex-row md:p-6 shadow-card">
-            <div className="relative w-full md:w-72"><FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted" />
+          <SectionReveal type="blur"><motion.div className="mb-8 sm:mb-10 flex flex-col items-center justify-between gap-3 sm:gap-4 rounded-2xl border border-border-subtle bg-[#111827]/60 p-3 sm:p-4 md:flex-row md:p-4 shadow-card">
+            <div className="relative w-full md:w-64"><FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted" size={15} />
               <input type="text" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder="Search projects..."
-                className="w-full rounded-full border border-border-subtle bg-bg-glass py-3 pl-12 pr-4 text-sm text-text-primary transition-colors focus:border-accent/30 focus:outline-none focus:ring-0 min-h-[48px] placeholder:text-text-muted" />
+                className="w-full rounded-full border border-border-subtle bg-bg-glass py-2 pl-10 pr-4 text-sm text-text-primary transition-colors focus:border-accent/30 focus:outline-none focus:ring-0 min-h-[40px] placeholder:text-text-muted" />
             </div>
-            <div className="flex flex-wrap justify-center gap-2 w-full md:w-auto overflow-x-auto scrollbar-none pb-1">
+            <div className="flex flex-wrap justify-center gap-1.5 w-full md:w-auto overflow-x-auto scrollbar-none">
               {allCategories.map(cat => (
                 <motion.button key={cat} onClick={() => setActiveCategory(cat)} whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.95 }}
-                  className={`rounded-full px-4 sm:px-5 min-h-[40px] text-sm font-medium transition-all duration-300 whitespace-nowrap flex-shrink-0 ${activeCategory === cat ? 'bg-accent text-background shadow-[0_0_20px_rgba(0,240,255,0.2)]' : 'border border-border-subtle bg-bg-glass text-text-muted hover:text-text-primary hover:border-border-visible'}`}>
+                  className={`rounded-full px-3.5 sm:px-4 min-h-[34px] text-xs sm:text-sm font-medium transition-all duration-300 whitespace-nowrap flex-shrink-0 ${activeCategory === cat ? 'bg-accent text-background shadow-[0_0_20px_rgba(0,240,255,0.2)]' : 'border border-border-subtle bg-bg-glass text-text-muted hover:text-text-primary hover:border-border-visible'}`}>
                   {cat}
                 </motion.button>
               ))}
