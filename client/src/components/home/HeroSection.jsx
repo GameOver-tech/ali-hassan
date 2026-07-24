@@ -269,11 +269,27 @@ export default function HeroSection() {
               </motion.span>
             </motion.div>
 
-            {/* Headline with letter animation */}
-            <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.35 }}
-              className="text-[clamp(2rem,8vw,3rem)] sm:text-5xl lg:text-7xl xl:text-[5.5rem] font-heading font-bold leading-[1.1] sm:leading-[1] lg:leading-[0.95] tracking-[-0.03em] text-text-primary">
-              {heroName}<br /><span className="text-gradient-pulse">{heroTitle}</span>{heroSubtitle && <><br />{heroSubtitle}</>}
-            </motion.h1>
+            {/* Headline with split text animation */}
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3, delay: 0.3 }}>
+              <h1 className="text-[clamp(2rem,8vw,3rem)] sm:text-5xl lg:text-7xl xl:text-[5.5rem] font-heading font-bold leading-[1.1] sm:leading-[1] lg:leading-[0.95] tracking-[-0.03em] text-text-primary">
+                {heroName.split(' ').map((word, i) => (
+                  <motion.span key={i} className="inline-block mr-[0.2em]"
+                    initial={{ opacity: 0, y: 40, rotateX: -20 }}
+                    animate={{ opacity: 1, y: 0, rotateX: 0 }}
+                    transition={{ duration: 0.5, delay: 0.4 + i * 0.12, ease: [0.25, 0.46, 0.45, 0.94] }}>
+                    {word}
+                  </motion.span>
+                ))}
+                <br />
+                <motion.span className="text-gradient-pulse inline-block"
+                  initial={{ opacity: 0, y: 40, scale: 0.9 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 0.6, delay: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}>
+                  {heroTitle}
+                </motion.span>
+                {heroSubtitle && <><br />{heroSubtitle}</>}
+              </h1>
+            </motion.div>
 
             <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.5 }}
               className="max-w-xl mx-auto lg:mx-0 text-[clamp(0.95rem,3.5vw,1.05rem)] sm:text-lg leading-[1.7] sm:leading-8 text-text-secondary">
