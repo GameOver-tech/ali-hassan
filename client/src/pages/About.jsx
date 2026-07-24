@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence, useInView } from 'framer-motion'
 import { Helmet } from 'react-helmet-async'
 import { Link, useLocation } from 'react-router-dom'
-import { FiDownload, FiTarget, FiEye, FiCalendar, FiArrowRight, FiAward, FiCode, FiBriefcase, FiBookOpen } from 'react-icons/fi'
+import { FiTarget, FiEye, FiCalendar, FiArrowRight, FiAward, FiCode, FiBriefcase, FiBookOpen } from 'react-icons/fi'
 import { useApp } from '../context/AppContext'
 
 const containerVariants = {
@@ -261,12 +261,13 @@ export default function About() {
               <motion.div variants={itemVariants} className="flex flex-wrap justify-center lg:justify-start gap-4 mt-8 sm:mt-10">
                 {aboutData?.cv_url && (
                   <a href={aboutData.cv_url} download
-                    className="group relative inline-flex items-center gap-4 px-10 min-h-[56px] bg-gradient-to-br from-accent to-[#0098a8] text-background font-bold text-sm sm:text-base rounded-2xl shadow-[0_0_30px_rgba(0,240,255,0.25)] hover:shadow-[0_0_60px_rgba(0,240,255,0.45)] transition-all duration-500 hover:-translate-y-0.5 active:translate-y-0 overflow-hidden">
-                    <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/15 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
-                    <span className="relative z-10">Download CV</span>
-                    <span className="relative z-10 flex items-center justify-center w-9 h-9 rounded-xl bg-white/20 group-hover:bg-white/30 group-hover:scale-110 transition-all duration-300">
-                      <FiDownload size={16} className="group-hover:translate-y-0.5 transition-transform duration-300" />
-                    </span>
+                    className="group inline-flex items-center gap-3 px-8 min-h-[54px] bg-[#FF8C42] text-white font-semibold text-sm sm:text-base rounded-full shadow-lg shadow-[#FF8C42]/25 hover:shadow-xl hover:shadow-[#FF8C42]/40 hover:brightness-110 hover:scale-[1.02] active:scale-[0.97] transition-all duration-300">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="group-hover:translate-y-0.5 transition-transform duration-300">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                      <polyline points="7 10 12 15 17 10" />
+                      <line x1="12" y1="15" x2="12" y2="3" />
+                    </svg>
+                    <span>Download CV</span>
                   </a>
                 )}
               </motion.div>
