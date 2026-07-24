@@ -28,9 +28,9 @@ function HomeProjectCard({ project }) {
       </a>
       <Link to={detailLink} className="relative block p-5">
         <motion.span initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="inline-flex rounded-full bg-accent/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.15em] text-accent shadow-[0_0_10px_rgba(0,240,255,0.1)]">{project.category || 'Featured'}</motion.span>
-        <h3 className="mt-3 text-lg font-heading font-semibold text-text-primary">{project.title}</h3>
+        <h3 className="mt-3 text-lg font-heading font-semibold text-text-primary group-hover:text-accent transition-colors duration-300">{project.title}</h3>
         {tags.length > 0 && <div className="mt-3 flex flex-wrap gap-1.5">{tags.slice(0, 3).map((tag, i) => <span key={i} className="px-2 py-0.5 rounded-md bg-white/5 text-xs text-text-muted border border-border-subtle">{tag}</span>)}</div>}
-        <div className="mt-4 flex items-center space-x-2 text-sm font-medium text-accent"><span>View Project</span><FiArrowRight className="transition-transform group-hover:translate-x-1" /></div>
+        <div className="mt-4 flex items-center space-x-2 text-sm font-medium text-accent group-hover:translate-x-1 transition-transform duration-300"><span>View Project</span><FiArrowRight /></div>
       </Link>
     </motion.div>
   )
@@ -59,7 +59,7 @@ export default function Home() {
           </Swiper>
           <motion.div className="mt-10 text-center" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
             <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-              <Link to="/projects" className="inline-flex items-center gap-2 rounded-full bg-accent px-6 sm:px-8 min-h-[48px] font-semibold text-sm sm:text-base text-background shadow-[0_0_20px_rgba(0,240,255,0.25)] hover:shadow-[0_0_40px_rgba(0,240,255,0.4)] transition-all duration-300"><span>{t.projects_view_all || 'View All Projects'}</span><FiArrowRight /></Link>
+              <Link to="/projects" className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-accent to-accent-neural px-6 sm:px-8 min-h-[48px] font-semibold text-sm sm:text-base text-background shadow-[0_0_20px_rgba(0,240,255,0.25)] hover:shadow-[0_0_40px_rgba(0,240,255,0.4)] transition-all duration-300"><span>{t.projects_view_all || 'View All Projects'}</span><FiArrowRight className="group-hover:translate-x-1 transition-transform" /></Link>
             </motion.div>
           </motion.div>
         </div>
@@ -120,16 +120,20 @@ export default function Home() {
       <section className="section-padding relative overflow-hidden">
         <div className="max-w-4xl mx-auto text-center">
           <SectionReveal type="scale">
-            <motion.div className="rounded-2xl border border-border-subtle bg-[#0d1117] p-6 sm:p-10 lg:p-16 shadow-card" whileHover={{ boxShadow: '0 0 60px rgba(0,240,255,0.08)' }}>
-              <h2 className="text-[clamp(2rem,7vw,2.5rem)] sm:text-4xl md:text-5xl font-heading font-semibold text-text-primary mb-6">{t.cta_title || "Let's Build Something Great"}</h2>
-              <p className="mb-8 max-w-2xl mx-auto text-base sm:text-lg text-text-muted">{t.cta_subtitle || 'Have a project in mind? Let\'s discuss how I can help bring your idea to life.'}</p>
-              <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 w-full max-w-full">
-                <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className="w-full sm:w-auto">
-                  <Link to="/contact" className="flex w-full sm:w-auto items-center justify-center gap-2 px-6 sm:px-8 min-h-[50px] bg-accent text-background font-semibold rounded-full shadow-[0_0_20px_rgba(0,240,255,0.25)] hover:shadow-[0_0_40px_rgba(0,240,255,0.4)] transition-all duration-300"><span>{t.cta_button || 'Start a Project'}</span><FiArrowRight /></Link>
-                </motion.div>
-                <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className="w-full sm:w-auto">
-                  <Link to="/projects" className="flex w-full sm:w-auto items-center justify-center gap-2 px-6 sm:px-8 min-h-[50px] border border-border-visible text-text-primary font-semibold rounded-full hover:bg-white/5 transition-all duration-300"><span>{t.cta_button_secondary || 'View Portfolio'}</span></Link>
-                </motion.div>
+            <motion.div className="rounded-2xl border border-border-subtle bg-gradient-to-br from-[#0d1117] via-[#111827] to-[#0d1117] p-6 sm:p-10 lg:p-16 shadow-card hover:shadow-[0_0_80px_rgba(0,240,255,0.06)] transition-shadow duration-700 relative overflow-hidden">
+              <div className="absolute top-0 -left-20 w-40 h-40 bg-accent/5 rounded-full blur-[80px]" />
+              <div className="absolute bottom-0 -right-20 w-40 h-40 bg-accent-neural/5 rounded-full blur-[80px]" />
+              <div className="relative">
+                <h2 className="text-[clamp(2rem,7vw,2.5rem)] sm:text-4xl md:text-5xl font-heading font-semibold text-text-primary mb-6">{t.cta_title || "Let's Build Something Great"}</h2>
+                <p className="mb-8 max-w-2xl mx-auto text-base sm:text-lg text-text-muted">{t.cta_subtitle || 'Have a project in mind? Let\'s discuss how I can help bring your idea to life.'}</p>
+                <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 w-full max-w-full">
+                  <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className="w-full sm:w-auto">
+                    <Link to="/contact" className="group flex w-full sm:w-auto items-center justify-center gap-2 px-6 sm:px-8 min-h-[50px] bg-gradient-to-r from-accent to-accent-neural text-background font-semibold rounded-full shadow-[0_0_25px_rgba(0,240,255,0.3)] hover:shadow-[0_0_50px_rgba(0,240,255,0.5)] transition-all duration-300"><span>{t.cta_button || 'Start a Project'}</span><FiArrowRight className="group-hover:translate-x-1 transition-transform" /></Link>
+                  </motion.div>
+                  <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className="w-full sm:w-auto">
+                    <Link to="/projects" className="group flex w-full sm:w-auto items-center justify-center gap-2 px-6 sm:px-8 min-h-[50px] border border-border-visible text-text-primary font-semibold rounded-full hover:bg-accent/5 hover:border-accent/30 transition-all duration-300"><span>{t.cta_button_secondary || 'View Portfolio'}</span><FiArrowRight className="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" /></Link>
+                  </motion.div>
+                </div>
               </div>
             </motion.div>
           </SectionReveal>
