@@ -258,17 +258,15 @@ export default function About() {
               <motion.p variants={itemVariants} className="leading-relaxed mt-3 sm:mt-4 text-sm sm:text-base text-text-muted max-w-xl mx-auto lg:mx-0">
                 {aboutData?.bio?.split('\n')[1] || "Specializing in AI/ML systems, LLM applications, and scalable full-stack platforms."}
               </motion.p>
-              <motion.div variants={itemVariants} className="flex flex-wrap justify-center lg:justify-start gap-3 mt-6 sm:mt-8">
+              <motion.div variants={itemVariants} className="flex flex-wrap justify-center lg:justify-start gap-4 mt-8 sm:mt-10">
                 {aboutData?.cv_url && (
                   <a href={aboutData.cv_url} download
-                    className="group relative inline-flex items-center gap-3 px-8 min-h-[52px] bg-gradient-to-r from-accent to-accent-neural text-background font-semibold rounded-full shadow-[0_0_25px_rgba(0,240,255,0.3)] hover:shadow-[0_0_50px_rgba(0,240,255,0.5)] transition-all duration-500 overflow-hidden active:scale-[0.97]">
-                    {/* Animated background shimmer */}
-                    <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
-                    {/* Icon with bounce */}
-                    <span className="relative flex items-center justify-center w-8 h-8 rounded-full bg-background/20 group-hover:bg-background/10 transition-colors">
-                      <FiDownload size={16} className="group-hover:animate-bounce" />
+                    className="group relative inline-flex items-center gap-4 px-10 min-h-[56px] bg-gradient-to-br from-accent to-[#0098a8] text-background font-bold text-sm sm:text-base rounded-2xl shadow-[0_0_30px_rgba(0,240,255,0.25)] hover:shadow-[0_0_60px_rgba(0,240,255,0.45)] transition-all duration-500 hover:-translate-y-0.5 active:translate-y-0 overflow-hidden">
+                    <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/15 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
+                    <span className="relative z-10">Download CV</span>
+                    <span className="relative z-10 flex items-center justify-center w-9 h-9 rounded-xl bg-white/20 group-hover:bg-white/30 group-hover:scale-110 transition-all duration-300">
+                      <FiDownload size={16} className="group-hover:translate-y-0.5 transition-transform duration-300" />
                     </span>
-                    <span className="relative">{content.about_cv_button || 'Download CV'}</span>
                   </a>
                 )}
               </motion.div>
