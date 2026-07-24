@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence, useInView } from 'framer-motion'
 import { Helmet } from 'react-helmet-async'
 import { Link, useLocation } from 'react-router-dom'
-import { FiDownload, FiTarget, FiEye, FiCalendar, FiArrowLeft, FiArrowRight, FiExternalLink, FiAward, FiFile, FiCode, FiBriefcase, FiBookOpen } from 'react-icons/fi'
+import { FiDownload, FiTarget, FiEye, FiCalendar, FiArrowRight, FiAward, FiCode, FiBriefcase, FiBookOpen } from 'react-icons/fi'
 import { useApp } from '../context/AppContext'
 
 const containerVariants = {
@@ -185,76 +185,30 @@ const certIcons = [
   'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z',
 ]
 
-function CertificationCard({ cert, index, onClick }) {
+function CertificationCard({ cert, index }) {
+  const detailLink = `/certificate/${cert.id}`
   return (
     <motion.div variants={scaleIn} whileHover={{ y: -4 }}>
-      <GlassCard className="cursor-pointer p-5 sm:p-6 text-center h-full flex flex-col" onClick={() => onClick(cert)}>
-        <div className="w-11 h-11 sm:w-12 sm:h-12 mx-auto rounded-xl bg-gradient-to-br from-accent/10 to-accent-neural/10 flex items-center justify-center mb-3 sm:mb-4 shadow-[0_0_12px_rgba(0,240,255,0.06)] group-hover:shadow-[0_0_20px_rgba(0,240,255,0.12)] transition-shadow">
-          <svg className="w-6 h-6 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d={certIcons[index % certIcons.length]} />
-          </svg>
-        </div>
-        <h3 className="text-sm sm:text-base font-heading font-semibold text-text-primary mb-1 leading-snug">{cert.title}</h3>
-        <p className="text-xs text-text-muted mb-auto">{cert.issuer}</p>
-        <div className="mt-4 inline-flex items-center gap-1.5 text-xs font-medium text-accent/70 group-hover:text-accent transition-colors">
-          <span>View details</span>
-          <FiArrowRight className="group-hover:translate-x-0.5 transition-transform" size={12} />
-        </div>
-      </GlassCard>
+      <Link to={detailLink}>
+        <GlassCard className="cursor-pointer p-5 sm:p-6 text-center h-full flex flex-col group">
+          <div className="w-11 h-11 sm:w-12 sm:h-12 mx-auto rounded-xl bg-gradient-to-br from-accent/10 to-accent-neural/10 flex items-center justify-center mb-3 sm:mb-4 shadow-[0_0_12px_rgba(0,240,255,0.06)] group-hover:shadow-[0_0_20px_rgba(0,240,255,0.12)] transition-shadow">
+            <svg className="w-6 h-6 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d={certIcons[index % certIcons.length]} />
+            </svg>
+          </div>
+          <h3 className="text-sm sm:text-base font-heading font-semibold text-text-primary mb-1 leading-snug">{cert.title}</h3>
+          <p className="text-xs text-text-muted mb-auto">{cert.issuer}</p>
+          <div className="mt-4 inline-flex items-center gap-1.5 text-xs font-medium text-accent/70 group-hover:text-accent transition-colors">
+            <span>View details</span>
+            <FiArrowRight className="group-hover:translate-x-0.5 transition-transform" size={12} />
+          </div>
+        </GlassCard>
+      </Link>
     </motion.div>
   )
 }
 
-function CertDetailView({ cert, onBack }) {
-  return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-4 sm:space-y-6">
-      <motion.button onClick={onBack} whileHover={{ x: -3 }}
-        className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-accent transition-colors">
-        <FiArrowLeft size={14} /> Back to Certifications
-      </motion.button>
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 sm:gap-6">
-        <div className="lg:col-span-2 space-y-4">
-          <GlassCard className="p-4 sm:p-6">
-            <div className="flex items-center gap-3 mb-3 sm:mb-4">
-              <div className="w-9 sm:w-11 h-9 sm:h-11 rounded-xl bg-accent/10 flex items-center justify-center"><FiAward className="text-accent" size={18} /></div>
-              <div>
-                <h3 className="text-base sm:text-lg font-heading font-semibold text-text-primary">{cert.title}</h3>
-                <p className="text-xs sm:text-sm text-accent">{cert.issuer}</p>
-              </div>
-            </div>
-            {cert.issue_date && (
-              <div className="flex items-center gap-2 text-xs text-text-muted mb-2 sm:mb-3"><FiCalendar size={10} /><span>Issued {new Date(cert.issue_date).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}</span></div>
-            )}
-            <p className="text-xs sm:text-sm text-text-muted leading-relaxed">{cert.description}</p>
-            {cert.credential_url && (
-              <a href={cert.credential_url} target="_blank" rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 mt-4 px-4 py-2 rounded-xl bg-accent/10 text-accent text-xs font-medium border border-accent/20 hover:bg-accent/20 transition-all">
-                <FiExternalLink size={12} /> Verify Credential
-              </a>
-            )}
-          </GlassCard>
-        </div>
-        <div className="lg:col-span-3">
-          {(cert.pdf_url || cert.image_url) ? (
-            <Link to={`/certificate/${cert.id}`}>
-              <GlassCard className="overflow-hidden cursor-pointer">
-                <div className="flex items-center justify-between px-5 py-3 border-b border-white/[0.06]">
-                  <span className="text-xs font-medium text-text-muted tracking-wide">CERTIFICATE</span>
-                  <span className="flex items-center gap-1 text-[10px] text-accent group-hover:gap-2 transition-all"><FiFile size={11} /> View full certificate</span>
-                </div>
-                <div className="p-6 sm:p-8 flex items-center justify-center min-h-[160px] sm:min-h-[200px] bg-[#0a0c12]">
-                  <div className="text-center"><FiAward size={32} className="mx-auto text-accent/40 mb-2" /><p className="text-sm text-text-muted">Click to view in full detail</p></div>
-                </div>
-              </GlassCard>
-            </Link>
-          ) : (
-            <GlassCard className="p-6 sm:p-8 flex items-center justify-center min-h-[160px]"><p className="text-sm text-text-muted">No certificate file attached.</p></GlassCard>
-          )}
-        </div>
-      </div>
-    </motion.div>
-  )
-}
+
 
 const TABS = [
   { key: 'experience', label: 'Experience', icon: FiBriefcase },
@@ -268,7 +222,6 @@ export default function About() {
   const location = useLocation()
   const content = siteSettings?.section_titles || {}
   const [activeTab, setActiveTab] = useState(location.state?.tab || 'experience')
-  const [selectedCert, setSelectedCert] = useState(null)
 
   return (
     <>
@@ -406,21 +359,15 @@ export default function About() {
 
               {/* Certifications */}
               {activeTab === 'certifications' && (
-                <div>
-                  {selectedCert ? (
-                    <CertDetailView cert={selectedCert} onBack={() => setSelectedCert(null)} />
-                  ) : (
-                    <motion.div variants={containerVariants} initial="hidden" animate="visible"
-                      className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-                      {(certifications || []).map((cert, i) => (
-                        <CertificationCard key={cert.id || i} cert={cert} index={i} onClick={setSelectedCert} />
-                      ))}
-                      {(!certifications || certifications.length === 0) && (
-                        <div className="col-span-full"><GlassCard className="p-8 text-center"><p className="text-sm text-text-muted">No certifications yet.</p></GlassCard></div>
-                      )}
-                    </motion.div>
+                <motion.div variants={containerVariants} initial="hidden" animate="visible"
+                  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+                  {(certifications || []).map((cert, i) => (
+                    <CertificationCard key={cert.id || i} cert={cert} index={i} />
+                  ))}
+                  {(!certifications || certifications.length === 0) && (
+                    <div className="col-span-full"><GlassCard className="p-8 text-center"><p className="text-sm text-text-muted">No certifications yet.</p></GlassCard></div>
                   )}
-                </div>
+                </motion.div>
               )}
 
             </motion.div>
