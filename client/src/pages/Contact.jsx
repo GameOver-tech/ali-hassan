@@ -73,22 +73,22 @@ export default function Contact() {
                 <div className="space-y-3 sm:space-y-4">
                   {contactItems.map((item, i) => (
                     <motion.div key={i} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} transition={{ duration: 0.25 }}>
-                      <div className="group flex items-center gap-3 sm:gap-4 p-4 rounded-2xl border border-white/[0.06] bg-[#111827] hover:border-accent/15 hover:shadow-[0_4px_30px_rgba(0,240,255,0.06)] transition-all duration-300 min-h-[72px]">
-                        <div className="w-11 h-11 rounded-xl bg-accent/10 flex items-center justify-center shrink-0 shadow-[0_0_14px_rgba(0,240,255,0.08)] group-hover:shadow-[0_0_20px_rgba(0,240,255,0.15)] transition-shadow duration-300">
-                          <item.icon className="text-accent" size={18} />
+                      <div className="group flex items-center gap-3 sm:gap-4 p-4 rounded-2xl border border-white/[0.06] bg-[#111827] hover:border-accent/15 hover:shadow-[0_4px_30px_rgba(0,240,255,0.06)] transition-all duration-300 min-h-[68px] overflow-hidden">
+                        <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-accent/10 flex items-center justify-center shrink-0 shadow-[0_0_14px_rgba(0,240,255,0.08)] group-hover:shadow-[0_0_20px_rgba(0,240,255,0.15)] transition-shadow duration-300">
+                          <item.icon className="text-accent" size={16} />
                         </div>
                         <div className="min-w-0 flex-1">
-                          <h3 className="text-xs font-semibold text-text-muted uppercase tracking-wider mb-0.5">{item.label}</h3>
-                          <p className="text-sm text-text-primary font-medium break-words leading-snug">{item.value}</p>
+                          <h3 className="text-[10px] sm:text-xs font-semibold text-text-muted uppercase tracking-wider mb-0.5">{item.label}</h3>
+                          <p className="text-xs sm:text-sm text-text-primary font-medium break-all leading-snug">{item.value}</p>
                         </div>
                       </div>
                     </motion.div>
                   ))}
                   <motion.a href={`https://wa.me/${whatsappNumber}`} target="_blank" rel="noopener noreferrer"
                     whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
-                    className="group flex items-center justify-center gap-3 w-full min-h-[56px] rounded-2xl border border-[#25D366]/20 bg-[#25D366]/[0.04] hover:bg-[#25D366]/[0.08] hover:border-[#25D366]/40 hover:shadow-[0_0_24px_rgba(37,211,102,0.12)] transition-all duration-300">
-                    <FaWhatsapp className="text-[#25D366] text-lg" />
-                    <span className="font-medium text-sm text-text-primary group-hover:text-[#25D366] transition-colors">Chat on WhatsApp</span>
+                    className="group flex items-center justify-center gap-3 w-full min-h-[52px] sm:min-h-[56px] rounded-2xl border border-[#25D366]/20 bg-[#25D366]/[0.04] hover:bg-[#25D366]/[0.08] hover:border-[#25D366]/40 hover:shadow-[0_0_24px_rgba(37,211,102,0.12)] transition-all duration-300">
+                    <FaWhatsapp className="text-[#25D366] text-base sm:text-lg" />
+                    <span className="font-medium text-xs sm:text-sm text-text-primary group-hover:text-[#25D366] transition-colors">Chat on WhatsApp</span>
                   </motion.a>
                 </div>
               </SectionReveal>

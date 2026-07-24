@@ -28,12 +28,12 @@ export default function FloatingButtons() {
   return (
     <>
       {/* Mobile: fixed bottom bar */}
-      <div className="fixed bottom-0 left-0 right-0 z-[999] sm:hidden flex items-center justify-around px-6 py-3 bg-[#0d1117]/95 backdrop-blur-md border-t border-white/[0.06]"
-        style={{ paddingBottom: 'max(12px, env(safe-area-inset-bottom, 0px))' }}>
+      <div className="fixed bottom-0 left-0 right-0 z-[999] sm:hidden flex items-center justify-evenly px-2 py-2 bg-[#0d1117]/95 backdrop-blur-md border-t border-white/[0.06] overflow-hidden"
+        style={{ paddingBottom: 'max(8px, env(safe-area-inset-bottom, 0px))' }}>
         {/* Scroll to top */}
         {showScroll && (
           <button onClick={scrollToTop}
-            className="flex flex-col items-center gap-0.5 min-w-[44px] justify-center text-text-muted hover:text-accent transition-colors active:scale-90"
+            className="flex items-center justify-center w-12 h-12 rounded-full border border-white/[0.08] bg-[#111827] text-text-muted hover:text-accent transition-colors active:scale-90"
             aria-label="Scroll to top">
             <HiArrowUp size={20} />
           </button>
@@ -41,14 +41,14 @@ export default function FloatingButtons() {
         {/* Chatbot */}
         {!chatbotOpen && (
           <button onClick={openChatbot}
-            className="flex flex-col items-center gap-0.5 min-w-[44px] justify-center text-accent transition-colors active:scale-90"
+            className="flex items-center justify-center w-12 h-12 rounded-full bg-accent text-background shadow-[0_0_20px_rgba(0,240,255,0.3)] transition-all active:scale-90"
             aria-label="Open AI Assistant">
             <FaRobot size={20} />
           </button>
         )}
-        {/* WhatsApp */}
+        {/* WhatsApp — always visible */}
         <button onClick={openWA}
-          className="flex flex-col items-center gap-0.5 min-w-[44px] justify-center text-[#25D366] transition-colors active:scale-90"
+          className="flex items-center justify-center w-12 h-12 rounded-full bg-[#25D366] text-white shadow-[0_0_20px_rgba(37,211,102,0.25)] transition-all active:scale-90"
           aria-label="Contact via WhatsApp">
           <FaWhatsapp size={22} />
         </button>
