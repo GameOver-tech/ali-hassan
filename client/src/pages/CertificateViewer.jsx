@@ -5,6 +5,7 @@ import { Helmet } from 'react-helmet-async'
 import { pdfjs, Document, Page } from 'react-pdf'
 import { FiArrowLeft } from 'react-icons/fi'
 import { useApp } from '../context/AppContext'
+import { supabase } from '../services/supabase'
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`
 
@@ -21,7 +22,12 @@ function getGoogleDriveEmbedUrl(url) {
 export default function CertificateViewer() {
   const { id } = useParams()
   const { certifications } = useApp()
-  const cert = certifications?.find(c => c.id === id) || null
+  const [directCert, setDirectCert] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  // First try from context, then fallback to direct Supabase query
+  const contextCert = certifications?.find(c => c.id === id) || null
+  const cert = contextCert || directCert
 
   const [numPages, setNumPages] = useState(null)
   const [pageNumber, setPageNumber] = useState(1)
@@ -32,6 +38,32 @@ export default function CertificateViewer() {
   const pdfContainerRef = useRef(null)
   const wheelAccumRef = useRef(0)
 
+  // Direct Supabase fetch if context data hasn't loaded yet
+  useEffect(() => {
+    if (contextCert) {
+      setLoading(false)
+      return
+    }
+    let cancelled = false
+    supabase
+      .from('certifications')
+      .select('*')
+      .eq('id', id)
+      .limit(1)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (!cancelled) {
+          setDirectCert(data || null)
+          setLoading(false)
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setLoading(false)
+      })
+    return () => { cancelled = true }
+  }, [id, contextCert])
+
+  // Reset viewer state when cert changes
   useEffect(() => {
     setPageNumber(1)
     setPdfError(false)
@@ -79,6 +111,17 @@ export default function CertificateViewer() {
 
   const onLoadSuccess = useCallback(({ numPages: n }) => { setNumPages(n); setPdfLoaded(true); setPdfError(false); setPageNumber(1) }, [])
   const onLoadError = useCallback(() => { setPdfError(true); setPdfLoaded(false) }, [])
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-10 h-10 rounded-full border-2 border-accent/30 border-t-accent animate-spin" />
+          <p className="text-sm text-text-muted">Loading certificate...</p>
+        </div>
+      </div>
+    )
+  }
 
   if (!cert) {
     return (
