@@ -19,7 +19,9 @@ for (const [buildKey, runtimeKey] of pairs) {
   const val = process.env[buildKey]
   if (val) {
     lines.push(`process.env['${buildKey}'] = ${JSON.stringify(val)};`)
-    lines.push(`process.env['${runtimeKey}'] = ${JSON.stringify(val)};`)
+    if (buildKey !== runtimeKey) {
+      lines.push(`process.env['${runtimeKey}'] = ${JSON.stringify(val)};`)
+    }
   }
 }
 

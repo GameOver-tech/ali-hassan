@@ -10,3 +10,4 @@ server/scripts/
 api/env.js
 api/env.json
 api/server.env
+server/build-vars.json

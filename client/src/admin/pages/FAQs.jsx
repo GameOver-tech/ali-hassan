@@ -14,7 +14,7 @@ export default function AdminFAQs() {
   useEffect(() => { fetchData() }, [])
 
   const fetchData = async () => {
-    try { const { data } = await adminAPI.getFAQs(); setItems(data || []) } catch {}
+    try { const data = await adminAPI.getFAQs(); setItems(data || []) } catch {}
   }
 
   const handleSave = async (e) => {

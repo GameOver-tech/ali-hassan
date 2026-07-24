@@ -32,7 +32,7 @@ export default function AdminCertifications() {
   useEffect(() => { fetchData() }, [])
 
   const fetchData = async () => {
-    try { const { data } = await adminAPI.getCertifications(); setItems(data || []) } catch {}
+    try { const data = await adminAPI.getCertifications(); setItems(data || []) } catch {}
   }
 
   const handleSave = async (e) => {

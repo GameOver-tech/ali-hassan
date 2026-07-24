@@ -14,7 +14,7 @@ export default function AdminExperience() {
   useEffect(() => { fetchData() }, [])
 
   const fetchData = async () => {
-    try { const { data } = await adminAPI.getExperience(); setItems(data || []) } catch {}
+    try { const data = await adminAPI.getExperience(); setItems(data || []) } catch {}
   }
 
   const handleSave = async (e) => {

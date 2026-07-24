@@ -197,8 +197,8 @@ router.get('/categories', listRoute('categories', 'name', { ascending: true }))
 router.post('/categories', ...createRoute('categories', schemas.category))
 router.delete('/categories/:id', async (req, res) => {
   try {
-    const { data: category } = await supabase.from('categories').select('name').eq('id', req.params.id).single()
-    if (category) {
+    const { data: category } = await supabase.from('categories').select('name').eq('id', req.params.id).maybeSingle()
+    if (category?.name) {
       await supabase.from('projects').update({ category: null, updated_at: new Date() }).eq('category', category.name)
     }
     const { error } = await supabase.from('categories').delete().eq('id', req.params.id)
