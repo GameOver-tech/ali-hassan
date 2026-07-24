@@ -69,12 +69,12 @@ export default function Navbar() {
       <motion.nav initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
         className={`fixed top-0 left-0 right-0 z-30 transition-all duration-500 ${isScrolled ? 'bg-[rgba(8,10,16,0.85)] backdrop-blur-2xl border-b border-border-subtle shadow-[0_8px_32px_rgba(0,0,0,0.5)]' : 'bg-transparent'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 md:h-18">
+          <div className="flex items-center justify-between h-14 md:h-16">
             {/* Animated logo */}
             <motion.div whileHover={{ scale: 1.03 }} className="flex-shrink-0">
               <Link to="/" onClick={(e) => { close(); handleHomeClick(e) }}>
-                {logoImage ? <img src={logoImage} alt={logoText} className="h-8 md:h-10 w-auto" />
-                  : <span className="text-xl md:text-2xl font-heading font-bold text-gradient relative">
+                {logoImage ? <img src={logoImage} alt={logoText} className="h-7 md:h-9 w-auto" />
+                  : <span className="text-lg md:text-xl font-heading font-bold text-gradient relative">
                       {logoText}
                       <motion.span className="absolute -inset-1 rounded-lg opacity-20 blur-sm" style={{ background: 'linear-gradient(135deg, #00F0FF, #7C3AED)' }}
                         animate={{ opacity: [0.1, 0.3, 0.1] }} transition={{ duration: 2, repeat: Infinity }} />
@@ -87,7 +87,7 @@ export default function Navbar() {
               {navLinks.map((link, i) => (
                 <motion.div key={link.path} custom={i} variants={linkVariants} initial="hidden" animate="visible">
                   <Link to={link.path} onClick={link.path === '/' ? handleHomeClick : undefined}
-                    className={`relative px-4 py-2 text-sm font-medium transition-colors duration-300 whitespace-nowrap ${activeSection === link.path ? 'text-accent' : 'text-text-secondary hover:text-text-primary'}`}>
+                    className={`relative px-3 py-1.5 text-sm font-medium transition-colors duration-300 whitespace-nowrap ${activeSection === link.path ? 'text-accent' : 'text-text-secondary hover:text-text-primary'}`}>
                     {link.name}
                     {activeSection === link.path && (
                       <motion.div layoutId="nav-indicator" className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-accent shadow-[0_0_8px_rgba(0,240,255,0.5)]"
@@ -96,9 +96,9 @@ export default function Navbar() {
                   </Link>
                 </motion.div>
               ))}
-              <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className="ml-4">
+              <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className="ml-3">
                 <Link to="/contact"
-                  className="block px-5 py-2 bg-accent text-background font-semibold rounded-full text-sm shadow-[0_0_20px_rgba(0,240,255,0.25)] hover:shadow-[0_0_40px_rgba(0,240,255,0.4)] transition-all duration-300 whitespace-nowrap">
+                  className="block px-4 py-1.5 bg-accent text-background font-semibold rounded-full text-sm shadow-[0_0_20px_rgba(0,240,255,0.25)] hover:shadow-[0_0_40px_rgba(0,240,255,0.4)] transition-all duration-300 whitespace-nowrap">
                   Get in Touch
                 </Link>
               </motion.div>
@@ -106,7 +106,7 @@ export default function Navbar() {
 
             {/* Mobile hamburger */}
             <motion.button onClick={toggle} whileTap={{ scale: 0.9 }}
-              className="lg:hidden relative w-11 h-11 flex items-center justify-center text-text-primary flex-shrink-0 rounded-full border border-border-subtle bg-bg-glass backdrop-blur transition-transform duration-200"
+              className="lg:hidden relative w-10 h-10 flex items-center justify-center text-text-primary flex-shrink-0 rounded-full border border-border-subtle bg-bg-glass backdrop-blur transition-transform duration-200"
               aria-label={isOpen ? 'Close menu' : 'Open menu'} aria-expanded={isOpen}>
               <AnimatePresence mode="wait">
                 {isOpen ? <motion.span key="x" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.2 }}><HiX size={22} /></motion.span>
