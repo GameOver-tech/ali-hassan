@@ -27,28 +27,36 @@ export default function FloatingButtons() {
 
   return (
     <>
-      {/* Mobile: fixed bottom bar */}
-      <div className="fixed bottom-0 left-0 right-0 z-[999] sm:hidden flex items-center justify-evenly px-2 py-2 bg-[#0d1117]/95 backdrop-blur-md border-t border-white/[0.06] overflow-hidden"
-        style={{ paddingBottom: 'max(8px, env(safe-area-inset-bottom, 0px))' }}>
-        {/* Scroll to top */}
-        {showScroll && (
-          <button onClick={scrollToTop}
-            className="flex items-center justify-center w-12 h-12 rounded-full border border-white/[0.08] bg-[#111827] text-text-muted hover:text-accent transition-colors active:scale-90"
-            aria-label="Scroll to top">
-            <HiArrowUp size={20} />
-          </button>
-        )}
-        {/* Chatbot */}
+      {/* Mobile: floating column on the right (same as desktop) */}
+      <div className="sm:hidden fixed flex flex-col items-center gap-3 z-[999]"
+        style={{ bottom: 'max(24px, calc(24px + env(safe-area-inset-bottom, 0px)))', right: 'max(16px, calc(16px + env(safe-area-inset-right, 0px)))' }}>
+        {/* Scroll to top — top */}
+        <AnimatePresence>
+          {showScroll && (
+            <motion.button
+              key="scroll-top"
+              initial={{ opacity: 0, y: 20, scale: 0.8 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 20, scale: 0.8 }}
+              onClick={scrollToTop}
+              whileTap={{ scale: 0.9 }}
+              className="w-12 h-12 rounded-full border border-white/[0.08] bg-[#111827] flex items-center justify-center text-text-muted hover:text-accent transition-all duration-300 shadow-lg active:scale-90"
+              aria-label="Scroll to top">
+              <HiArrowUp size={20} />
+            </motion.button>
+          )}
+        </AnimatePresence>
+        {/* Chatbot — middle */}
         {!chatbotOpen && (
-          <button onClick={openChatbot}
-            className="flex items-center justify-center w-12 h-12 rounded-full bg-accent text-background shadow-[0_0_20px_rgba(0,240,255,0.3)] transition-all active:scale-90"
+          <button id="chatbot-toggle-fab-mobile" onClick={openChatbot}
+            className="w-12 h-12 rounded-full bg-accent flex items-center justify-center text-background shadow-[0_0_20px_rgba(0,240,255,0.3)] transition-all active:scale-90"
             aria-label="Open AI Assistant">
             <FaRobot size={20} />
           </button>
         )}
-        {/* WhatsApp — always visible */}
+        {/* WhatsApp — bottom */}
         <button onClick={openWA}
-          className="flex items-center justify-center w-12 h-12 rounded-full bg-[#25D366] text-white shadow-[0_0_20px_rgba(37,211,102,0.25)] transition-all active:scale-90"
+          className="w-12 h-12 rounded-full bg-[#25D366] flex items-center justify-center text-white shadow-[0_0_20px_rgba(37,211,102,0.25)] transition-all active:scale-90"
           aria-label="Contact via WhatsApp">
           <FaWhatsapp size={22} />
         </button>
