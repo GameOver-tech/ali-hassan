@@ -244,7 +244,7 @@ export default function About() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div variants={containerVariants} initial="hidden" animate="visible"
             className="grid grid-cols-1 lg:grid-cols-2 gap-10 sm:gap-14 lg:gap-20 items-center">
-            <div className="order-2 lg:order-1 text-center lg:text-left">
+            <div className="order-1 lg:order-1 text-center lg:text-left">
               <motion.span variants={itemVariants} className="inline-flex items-center gap-2 rounded-full border border-accent/20 bg-accent/8 px-4 py-1.5 text-xs sm:text-sm font-medium text-accent backdrop-blur-sm mb-4 sm:mb-6">
                 <span className="w-1.5 h-1.5 rounded-full bg-accent-green animate-pulse" />
                 {content.about_subtitle || 'About'}
