@@ -37,7 +37,7 @@ export default function Navbar() {
   const [activeSection, setActiveSection] = useState('/')
   const location = useLocation()
   const { isScrolled } = useScrollPosition()
-  const { siteSettings, socialLinks, heroData } = useApp()
+  const { siteSettings, heroData } = useApp()
   const logoText = siteSettings?.logo_text || 'AH'
   const logoImage = siteSettings?.logo_image_url || null
 
@@ -137,27 +137,18 @@ export default function Navbar() {
                   </motion.div>
                 ))}
               </nav>
-              <div className="border-t border-border-subtle px-5 py-5 space-y-4">
+              <div className="border-t border-border-subtle px-5 py-5">
                 {heroData?.resume_url && (
                   <a href={heroData.resume_url} download
-                    className="group relative flex items-center justify-center gap-3 w-full py-3 bg-gradient-to-r from-accent to-accent-neural text-background font-semibold rounded-full text-sm shadow-[0_0_25px_rgba(0,240,255,0.3)] hover:shadow-[0_0_45px_rgba(0,240,255,0.5)] transition-all duration-500 overflow-hidden active:scale-[0.97]">
+                    className="group relative flex items-center justify-center gap-3 w-full py-3.5 bg-gradient-to-br from-accent via-accent-neural to-purple-500 text-background font-bold rounded-full text-sm shadow-[0_0_30px_rgba(0,240,255,0.3)] hover:shadow-[0_0_60px_rgba(124,58,237,0.4)] transition-all duration-500 overflow-hidden hover:scale-[1.02] active:scale-[0.95]">
                     <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
-                    <span className="relative flex items-center gap-2">
-                      <FiDownload size={14} className="group-hover:animate-bounce" />
+                    <span className="relative flex items-center justify-center gap-2.5">
+                      <span className="flex items-center justify-center w-7 h-7 rounded-full bg-white/20 group-hover:bg-white/10 transition-colors">
+                        <FiDownload size={13} className="group-hover:animate-bounce" />
+                      </span>
                       <span>Download Resume</span>
                     </span>
                   </a>
-                )}
-                {socialLinks?.length > 0 && (
-                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4, duration: 0.3 }} className="flex items-center justify-center gap-3 flex-wrap">
-                    <span className="text-xs uppercase tracking-[0.2em] text-text-muted mr-1">Follow</span>
-                    {socialLinks.filter(s => s.active !== false).slice(0, 5).map(link => (
-                      <motion.a key={link.id} href={link.url} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.15, y: -2 }} whileTap={{ scale: 0.95 }}
-                        className="w-9 h-9 flex items-center justify-center rounded-full border border-border-subtle text-text-muted hover:border-accent/30 hover:bg-accent/10 hover:text-accent transition-colors duration-200" aria-label={link.platform}>
-                        <span className="text-xs font-medium">{link.platform?.[0]?.toUpperCase()}</span>
-                      </motion.a>
-                    ))}
-                  </motion.div>
                 )}
               </div>
             </SidebarPanel>
