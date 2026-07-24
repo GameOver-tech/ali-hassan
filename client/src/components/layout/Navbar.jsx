@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { HiMenu, HiX } from 'react-icons/hi'
+import { FiDownload } from 'react-icons/fi'
 import { useScrollPosition } from '../../hooks/useScrollPosition'
 import { useApp } from '../../context/AppContext'
 
@@ -138,11 +139,14 @@ export default function Navbar() {
               </nav>
               <div className="border-t border-border-subtle px-5 py-5 space-y-4">
                 {heroData?.resume_url && (
-                  <motion.a initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.3 }}
-                    href={heroData.resume_url} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
-                    className="flex items-center justify-center gap-2 w-full py-3 bg-accent text-background font-semibold rounded-full text-sm shadow-[0_0_20px_rgba(0,240,255,0.2)]">
-                    Download Resume
-                  </motion.a>
+                  <a href={heroData.resume_url} download
+                    className="group relative flex items-center justify-center gap-3 w-full py-3 bg-gradient-to-r from-accent to-accent-neural text-background font-semibold rounded-full text-sm shadow-[0_0_25px_rgba(0,240,255,0.3)] hover:shadow-[0_0_45px_rgba(0,240,255,0.5)] transition-all duration-500 overflow-hidden active:scale-[0.97]">
+                    <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
+                    <span className="relative flex items-center gap-2">
+                      <FiDownload size={14} className="group-hover:animate-bounce" />
+                      <span>Download Resume</span>
+                    </span>
+                  </a>
                 )}
                 {socialLinks?.length > 0 && (
                   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4, duration: 0.3 }} className="flex items-center justify-center gap-3 flex-wrap">
