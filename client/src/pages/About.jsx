@@ -72,13 +72,13 @@ function GlassCard({ children, className = '' }) {
 
 function ProfileImage({ photoUrl }) {
   return (
-    <div className="relative mx-auto w-56 h-56 sm:w-72 sm:h-72 lg:w-80 lg:h-80">
+    <div className="relative mx-auto w-64 h-64 sm:w-80 sm:h-80 lg:w-96 lg:h-96">
       {/* Subtle glow */}
-      <motion.div className="absolute -inset-8 rounded-full lg:rounded-3xl bg-accent/5 blur-[60px]" animate={{ scale: [1, 1.08, 1] }} transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }} />
-      {/* Image container */}
-      <div className="relative h-full w-full overflow-hidden rounded-full lg:rounded-3xl border-2 border-white/[0.06] bg-bg-surface shadow-elevated">
-        {photoUrl ? <img src={photoUrl} alt="Ali Hassan" className="h-full w-full rounded-full lg:rounded-2xl object-cover" />
-          : <div className="flex h-full w-full items-center justify-center text-4xl sm:text-6xl font-heading font-bold text-gradient">AH</div>}
+      <motion.div className="absolute -inset-6 rounded-2xl bg-accent/5 blur-[80px]" animate={{ scale: [1, 1.08, 1] }} transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }} />
+      {/* Image card — consistently rounded, not circular */}
+      <div className="relative h-full w-full overflow-hidden rounded-2xl border border-white/[0.08] bg-bg-surface shadow-elevated">
+        {photoUrl ? <img src={photoUrl} alt="Ali Hassan" className="h-full w-full object-cover transition-transform duration-700 hover:scale-105" />
+          : <div className="flex h-full w-full items-center justify-center text-5xl sm:text-7xl font-heading font-bold text-gradient">AH</div>}
       </div>
       {/* Floating badge */}
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6, duration: 0.5 }}
@@ -257,7 +257,7 @@ export default function About() {
                     <span className="relative flex items-center justify-center w-8 h-8 rounded-full bg-background/20 group-hover:bg-background/10 transition-colors">
                       <FiDownload size={16} className="group-hover:animate-bounce" />
                     </span>
-                    <span className="relative">{content.about_cv_button || 'Download Resume'}</span>
+                    <span className="relative">{content.about_cv_button || 'Download CV'}</span>
                   </a>
                 )}
               </motion.div>

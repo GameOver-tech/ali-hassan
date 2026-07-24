@@ -42,4 +42,5 @@ See [ui/taste.md](ui/taste.md)
 
 # coding-style
 - When building or redesigning pages, refactor them into small, focused reusable sub-components (e.g., dedicated files for hero, cards, timeline, stats, section titles) rather than one monolithic page component. Each sub-component should have a single responsibility. Avoid duplicate logic across these components. Confidence: 0.75
+- When deleting/removing a feature or section of code, proactively audit the file for now-unused imports, destructured variables, and references — clean them up in the same pass rather than leaving dead imports that could trigger build warnings or confuse future developers. Confidence: 0.80
 - File download links (resume/CV, PDFs, documents) must use the HTML `download` attribute on the `<a>` tag so clicking triggers a file download instead of navigating to or opening the file in a new tab. Never use `target="_blank"` for downloadable files — always use `download` (optionally paired with a polished UI). Confidence: 0.85
