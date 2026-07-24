@@ -63,7 +63,7 @@ router.get('/dashboard', async (req, res) => {
 function singleGet(table) {
   return async (req, res) => {
     try {
-      const { data, error } = await supabase.from(table).select('*').maybeSingle()
+      const { data, error } = await supabase.from(table).select('*').limit(1).maybeSingle()
       if (error) return res.status(400).json({ error: error.message })
       res.json(data)
     } catch (err) {
