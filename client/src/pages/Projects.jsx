@@ -50,8 +50,20 @@ export default function Projects() {
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <SectionReveal type="scale"><div className="mx-auto mb-8 sm:mb-12 max-w-3xl text-center">
             <motion.span initial={{ opacity: 0, y: -10 }} whileInView={{ opacity: 1, y: 0 }} className="text-sm font-semibold uppercase tracking-[0.25em] text-text-muted">Portfolio</motion.span>
-            <h1 className="mt-4 mb-4 sm:mb-6 font-heading text-[clamp(1.8rem,6vw,2.8rem)] sm:text-4xl md:text-6xl font-bold text-text-primary">My <span className="text-gradient">Work</span></h1>
-            <p className="text-sm sm:text-lg leading-8 text-text-muted">A selection of AI systems, applications, and technical solutions I've built.</p>
+            <h1 className="mt-4 mb-4 sm:mb-6 font-heading text-[clamp(1.8rem,6vw,2.8rem)] sm:text-4xl md:text-6xl font-bold text-text-primary">
+              {'My Work'.split(' ').map((word, i) => (
+                <motion.span key={i} className="inline-block mr-[0.15em]"
+                  initial={{ opacity: 0, y: 40, rotateX: -15 }}
+                  whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.12, ease: [0.25, 0.46, 0.45, 0.94] }}>
+                  {i === 1 ? <span className="text-gradient">{word}</span> : word}
+                </motion.span>
+              ))}
+            </h1>
+            <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.5 }}
+              className="text-sm sm:text-lg leading-8 text-text-muted">A selection of AI systems, applications, and technical solutions I've built.</motion.p>
           </div></SectionReveal>
 
           <SectionReveal type="blur"><motion.div className="mb-8 sm:mb-10 flex flex-col items-center justify-between gap-3 sm:gap-4 rounded-2xl border border-border-subtle bg-[#111827]/60 p-3 sm:p-4 md:flex-row md:p-4 shadow-card">

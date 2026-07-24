@@ -1,5 +1,6 @@
 # ui
 
+- The landing page (especially the hero section) must deliver a premium, visually stunning first impression — gradient blurs, animated particles, staggered word/split-text animations, magnetic button effects, and layered depth. The user will explicitly reject landing pages that feel underwhelming or insufficiently polished, calling it out as a separate concern from animation quality. Confidence: 0.90
 - Admin-only fields (status flags like "Active", ordering numbers like "Order", file management status like "File") must be strictly segregated from public-facing views. The public user should never see raw backend administration controls or database fields. Any certificate/document/public viewer page should display only presentation-relevant metadata (title, issuer, image, dates, credential link, description) in a polished, professional layout — never exposing admin CRUD fields to site visitors. Confidence: 0.85
 - Use a dark "Neural Core" robotics theme with deep black background (#080A10), robot-eye cyan accent (#00F0FF), neural violet (#7C3AED), energy coral (#FF3B6F), and system green (#00E676) for status indicators. Confidence: 0.85
 

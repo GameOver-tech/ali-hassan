@@ -52,7 +52,24 @@ export default function Home() {
         <div className="relative max-w-7xl mx-auto">
           <SectionReveal type="scale"><div className="mb-8 sm:mb-14 text-center">
             <motion.span initial={{ opacity: 0, y: -10 }} whileInView={{ opacity: 1, y: 0 }} className="text-sm font-semibold uppercase tracking-[0.25em] text-text-muted block">{t.portfolio_subtitle || 'Portfolio'}</motion.span>
-            <h2 className="mt-4 text-[clamp(1.8rem,6vw,2.5rem)] sm:text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-text-primary">{t.portfolio_heading || 'Selected'} <span className="text-gradient">{t.portfolio_heading_highlight || 'Projects'}</span></h2>
+            <h2 className="mt-4 text-[clamp(1.8rem,6vw,2.5rem)] sm:text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-text-primary">
+              {(t.portfolio_heading || 'Selected').split(' ').map((word, i) => (
+                <motion.span key={i} className="inline-block mr-[0.15em]"
+                  initial={{ opacity: 0, y: 40, rotateX: -15 }}
+                  whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}>
+                  {word}
+                </motion.span>
+              ))}{' '}
+              <motion.span className="text-gradient inline-block"
+                initial={{ opacity: 0, scale: 0.7 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}>
+                {t.portfolio_heading_highlight || 'Projects'}
+              </motion.span>
+            </h2>
           </div></SectionReveal>
           <Swiper modules={[Autoplay, Pagination]} spaceBetween={24} slidesPerView={1} breakpoints={{ 640: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }} autoplay={{ delay: 4000, disableOnInteraction: false }} pagination={{ clickable: true }} className="pb-14">
             {projects?.slice(0, 6).map(project => <SwiperSlide key={project.id}><HomeProjectCard project={project} /></SwiperSlide>)}
