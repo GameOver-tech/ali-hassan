@@ -70,7 +70,7 @@ export default function AdminSettings() {
           copyright_text: data.copyright_text || '',
           logo_text: data.logo_text || 'AH',
           logo_image_url: data.logo_image_url || '',
-          section_titles: data.section_titles ? JSON.stringify(data.section_titles) : JSON.stringify(defaultSectionTitles),
+          section_titles: JSON.stringify({ ...defaultSectionTitles, ...(data.section_titles || {}) }),
         })
       }
     } catch (err) { console.error('Error loading settings:', err) }
