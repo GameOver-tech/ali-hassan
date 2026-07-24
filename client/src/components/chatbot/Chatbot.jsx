@@ -51,6 +51,12 @@ export default function Chatbot() {
 
   useEffect(() => { messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }) }, [messages])
 
+  // Expose chatbot open state so FloatingButtons can respond
+  useEffect(() => {
+    window.__chatbotOpen = isOpen
+    return () => { window.__chatbotOpen = false }
+  }, [isOpen])
+
   // Scroll lock + focus input when chatbot opens/closes
   useEffect(() => {
     if (isOpen) {
@@ -146,15 +152,8 @@ export default function Chatbot() {
 
   return (
     <>
-      {/* Toggle button — always visible when sidebar is closed */}
-      {!isOpen && (
-        <button id="chatbot-toggle" onClick={() => setIsOpen(true)}
-          className="fixed z-[999] w-12 h-12 rounded-full bg-accent flex items-center justify-center text-background shadow-[0_0_20px_rgba(0,240,255,0.3)] transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-[0_0_40px_rgba(0,240,255,0.5)]"
-          style={{ bottom: 'max(152px, calc(152px + env(safe-area-inset-bottom, 0px)))', right: 'max(16px, calc(16px + env(safe-area-inset-right, 0px)))' }}
-          aria-label="Open AI Assistant">
-          <FaRobot size={18} />
-        </button>
-      )}
+      {/* Hidden toggle for FloatingButtons to trigger programmatically */}
+      <button id="chatbot-toggle" onClick={() => setIsOpen(true)} className="hidden" aria-hidden="true" />
 
       {/* Backdrop overlay */}
       <AnimatePresence>
