@@ -139,7 +139,7 @@ export default function Navbar() {
               <div className="border-t border-border-subtle px-5 py-5">
                 {heroData?.resume_url && (
                   <a href={heroData.resume_url} download
-                    className="group inline-flex items-center justify-center gap-3 w-full py-3.5 bg-[#FF8C42] text-white font-semibold rounded-full text-sm shadow-lg shadow-[#FF8C42]/25 hover:shadow-xl hover:shadow-[#FF8C42]/40 hover:brightness-110 hover:scale-[1.02] active:scale-[0.97] transition-all duration-300">
+                    className="group inline-flex items-center justify-center gap-3 w-full py-3.5 bg-gradient-to-r from-accent to-accent-neural text-background font-bold rounded-full text-sm shadow-lg shadow-accent/25 hover:shadow-xl hover:shadow-accent/40 hover:brightness-110 hover:scale-[1.02] active:scale-[0.97] transition-all duration-300">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="group-hover:translate-y-0.5 transition-transform duration-300">
                       <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                       <polyline points="7 10 12 15 17 10" />
