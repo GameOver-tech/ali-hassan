@@ -72,36 +72,35 @@ function GlassCard({ children, className = '' }) {
 
 function ProfileImage({ photoUrl }) {
   return (
-    <div className="relative mx-auto w-full max-w-sm lg:max-w-md xl:max-w-lg">
+    <div className="relative mx-auto w-full max-w-xs sm:max-w-sm lg:max-w-md">
       {/* Abstract decorative circles behind */}
-      <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-accent/8 blur-[100px] animate-pulse-slow" />
-      <div className="absolute -bottom-16 -left-16 w-48 h-48 rounded-full bg-accent-neural/6 blur-[80px]" />
-      <div className="absolute top-1/2 -left-8 w-32 h-32 rounded-full border border-accent/10" />
+      <div className="absolute -top-16 -right-16 w-48 h-48 rounded-full bg-accent/8 blur-[80px] animate-pulse-slow" />
+      <div className="absolute -bottom-12 -left-12 w-36 h-36 rounded-full bg-accent-neural/6 blur-[60px]" />
 
       {/* Animated gradient ring */}
-      <motion.div className="absolute -inset-6 rounded-3xl opacity-25 blur-[80px]"
+      <motion.div className="absolute -inset-4 rounded-2xl opacity-20 blur-[60px]"
         style={{ background: 'linear-gradient(135deg, #00F0FF, #7C3AED, #FF3B6F)' }}
         animate={{ rotate: [0, 360] }}
         transition={{ duration: 12, repeat: Infinity, ease: 'linear' }} />
 
-      {/* Image card — tall vertical rectangle with large radius */}
-      <div className="relative w-full aspect-[3/4] max-h-[600px] overflow-hidden rounded-3xl border border-white/[0.08] bg-bg-surface shadow-2xl shadow-black/40">
-        <div className="absolute inset-0 bg-gradient-to-t from-background/50 via-transparent to-transparent z-10" />
+      {/* Image card — natural portrait ratio */}
+      <div className="relative w-full aspect-[4/5] max-h-[500px] overflow-hidden rounded-2xl border border-white/[0.08] bg-bg-surface shadow-2xl shadow-black/40">
+        <div className="absolute inset-0 bg-gradient-to-t from-background/40 via-transparent to-transparent z-10" />
         {photoUrl ? (
           <img src={photoUrl} alt="Ali Hassan" className="h-full w-full object-cover object-center transition-all duration-700 hover:scale-105" />
         ) : (
-          <div className="flex h-full w-full items-center justify-center text-6xl sm:text-8xl font-heading font-bold text-gradient">AH</div>
+          <div className="flex h-full w-full items-center justify-center text-5xl sm:text-7xl font-heading font-bold text-gradient">AH</div>
         )}
       </div>
 
       {/* Floating badge */}
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6, duration: 0.5 }}
-        className="absolute -bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 rounded-full bg-background/90 backdrop-blur-md border border-white/[0.12] px-4 py-2.5 shadow-lg shadow-accent/10">
-        <span className="relative flex h-2.5 w-2.5">
+        className="absolute -bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-2 rounded-full bg-background/90 backdrop-blur-md border border-white/[0.12] px-3.5 py-2 shadow-lg shadow-accent/10">
+        <span className="relative flex h-2 w-2">
           <span className="absolute inset-0 rounded-full bg-[#22C55E] animate-ping opacity-60" />
-          <span className="relative rounded-full bg-[#22C55E] w-2.5 h-2.5" />
+          <span className="relative rounded-full bg-[#22C55E] w-2 h-2" />
         </span>
-        <span className="text-xs font-medium text-white whitespace-nowrap">Available for Work</span>
+        <span className="text-[11px] font-medium text-white whitespace-nowrap">Available for Work</span>
       </motion.div>
     </div>
   )
