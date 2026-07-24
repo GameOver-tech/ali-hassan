@@ -37,23 +37,40 @@ export function AppProvider({ children }) {
   }, [])
 
   const loadAllData = useCallback(async () => {
-    const settingsRes = await safeSingle('settings')
-    const heroRes = await safeSingle('hero')
-    const aboutRes = await safeSingle('about')
+    const [settingsRes, heroRes, aboutRes, chatbotConfigRes] = await Promise.all([
+      safeSingle('settings'),
+      safeSingle('hero'),
+      safeSingle('about'),
+      safeSingle('chatbot_config'),
+    ])
 
-    const { data: socialRes } = await supabase.from('social_links').select('*').eq('active', true)
-    const { data: servicesRes } = await supabase.from('services').select('*').eq('status', 'published')
-    const { data: projectsRes } = await supabase.from('projects').select('*, project_images(*)').eq('status', 'published')
-    const { data: skillsRes } = await supabase.from('skills').select('*').eq('active', true)
-    const { data: teamRes } = await supabase.from('team').select('*').eq('active', true)
-    const { data: testimonialsRes } = await supabase.from('testimonials').select('*').eq('status', 'published')
-    const { data: statsRes } = await supabase.from('stats').select('*').eq('active', true).order('order')
-    const chatbotConfigRes = await safeSingle('chatbot_config')
-    const { data: experienceRes } = await supabase.from('experience').select('*').order('start_date', { ascending: false })
-    const { data: educationRes } = await supabase.from('education').select('*').order('order')
-    const { data: faqsRes } = await supabase.from('faqs').select('*').eq('active', true).order('order')
-    const { data: certsRes } = await supabase.from('certifications').select('*').eq('active', true).order('order')
-    const { data: processStepsRes } = await supabase.from('process_steps').select('*').eq('active', true).order('order')
+    const [
+      { data: socialRes },
+      { data: servicesRes },
+      { data: projectsRes },
+      { data: skillsRes },
+      { data: teamRes },
+      { data: testimonialsRes },
+      { data: statsRes },
+      { data: experienceRes },
+      { data: educationRes },
+      { data: faqsRes },
+      { data: certsRes },
+      { data: processStepsRes },
+    ] = await Promise.all([
+      supabase.from('social_links').select('*').eq('active', true),
+      supabase.from('services').select('*').eq('status', 'published'),
+      supabase.from('projects').select('*, project_images(*)').eq('status', 'published'),
+      supabase.from('skills').select('*').eq('active', true),
+      supabase.from('team').select('*').eq('active', true),
+      supabase.from('testimonials').select('*').eq('status', 'published'),
+      supabase.from('stats').select('*').eq('active', true).order('order'),
+      supabase.from('experience').select('*').order('start_date', { ascending: false }),
+      supabase.from('education').select('*').order('order'),
+      supabase.from('faqs').select('*').eq('active', true).order('order'),
+      supabase.from('certifications').select('*').eq('active', true).order('order'),
+      supabase.from('process_steps').select('*').eq('active', true).order('order'),
+    ])
 
     if (settingsRes) setSiteSettings(settingsRes)
     if (socialRes) setSocialLinks(socialRes)
