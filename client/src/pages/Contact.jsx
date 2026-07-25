@@ -1,23 +1,22 @@
-import { useState, useCallback } from 'react'
+import { useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { Helmet } from 'react-helmet-async'
-import { FiMail, FiPhone, FiMapPin, FiSend, FiCheck, FiLoader, FiCopy, FiArrowUpRight, FiExternalLink } from 'react-icons/fi'
+import { FiMail, FiPhone, FiMapPin, FiSend, FiCheck, FiLoader, FiArrowUpRight } from 'react-icons/fi'
 import SectionReveal from '../components/ui/SectionReveal'
+import { showToast } from '../components/ui/Toast'
 import { useApp } from '../context/AppContext'
 import { adminAPI } from '../services/api'
 import { staggerContainer, staggerItem } from '../animations/variants'
 
 // ── Premium Contact Card ──
-function ContactCard({ item, index }) {
-  const [copied, setCopied] = useState(false)
-
+function ContactCard({ item }) {
   const handleCopy = useCallback(async (e) => {
     if (item.action !== 'copy') return
     e.preventDefault()
+    e.stopPropagation()
     try {
       await navigator.clipboard.writeText(item.value)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
+      showToast('Email copied successfully.')
     } catch { /* fallback */ }
   }, [item])
 
@@ -27,10 +26,10 @@ function ContactCard({ item, index }) {
 
   const inner = (
     <motion.div
-      onClick={handleClick}
-      className="group relative overflow-hidden rounded-xl border border-border-subtle bg-gradient-to-br from-bg-card via-bg-card to-bg-elevated p-[22px] cursor-pointer transition-all duration-400"
-      whileHover={{ y: -2, scale: 1.005 }}
-      whileTap={{ scale: 0.99 }}
+      onClick={item.action === 'copy' ? handleClick : undefined}
+      className={`group relative overflow-hidden rounded-xl border border-border-subtle bg-gradient-to-br from-bg-card via-bg-card to-bg-elevated p-[22px] transition-all duration-400 ${item.action ? 'cursor-pointer' : 'cursor-default'}`}
+      whileHover={item.action ? { y: -2, scale: 1.005 } : {}}
+      whileTap={item.action ? { scale: 0.99 } : {}}
     >
       {/* Hover glow sweep */}
       <motion.span
@@ -49,28 +48,19 @@ function ContactCard({ item, index }) {
         <div className="flex items-center justify-between">
           <div className="w-[34px] h-[34px] rounded-lg bg-accent/8 flex items-center justify-center group-hover:bg-accent/15 transition-all duration-400"
             style={{ boxShadow: '0 0 0 rgba(0,240,255,0)' }}>
-            <motion.div
-              animate={copied ? { rotate: [0, 10, -10, 0] } : {}}
-              transition={{ duration: 0.3 }}
-            >
-              <item.icon className="text-accent" size={14} />
-            </motion.div>
+            <item.icon className="text-accent" size={14} />
           </div>
 
           {/* Action indicator */}
           {item.action === 'copy' && (
-            <motion.span
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={copied ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
-              className="text-[11px] font-medium text-accent-green flex items-center gap-1"
-            >
-              <FiCheck size={12} />
-              Copied
-            </motion.span>
+            <span className="text-[11px] text-text-muted/40 group-hover:text-accent transition-colors duration-300 flex items-center gap-1">
+              <span className="hidden sm:inline">Click to copy</span>
+              <FiCheck size={12} className="opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            </span>
           )}
-          {item.action !== 'copy' && (
+          {item.action === 'call' && (
             <span className="text-[11px] text-text-muted/40 group-hover:text-text-muted/70 transition-colors duration-300 flex items-center gap-1">
-              <span className="hidden sm:inline">{item.hint}</span>
+              <span className="hidden sm:inline">Click to call</span>
               <FiArrowUpRight size={12} className="group-hover:translate-x-[1px] group-hover:-translate-y-[1px] transition-transform duration-300" />
             </span>
           )}
@@ -89,7 +79,10 @@ function ContactCard({ item, index }) {
     </motion.div>
   )
 
-  if (item.href && item.action !== 'copy') {
+  // Email: click-to-copy (no navigation)
+  // Phone: tel: link
+  // Location: display-only
+  if (item.action === 'call' || (item.href && item.action !== 'copy')) {
     return <a href={item.href} className="block">{inner}</a>
   }
   return inner
@@ -177,9 +170,9 @@ export default function Contact() {
   }
 
   const contactItems = [
-    { icon: FiMail, label: 'Email', value: contactEmail, hint: 'Copy address', action: 'copy' },
-    { icon: FiPhone, label: 'Phone', value: contactPhone, href: `tel:${contactPhone}`, hint: 'Click to call' },
-    { icon: FiMapPin, label: 'Location', value: contactAddress, href: `https://maps.google.com/?q=${encodeURIComponent(contactAddress)}`, hint: 'Open Maps', external: true },
+    { icon: FiMail, label: 'Email', value: contactEmail, action: 'copy' },
+    { icon: FiPhone, label: 'Phone', value: contactPhone, href: `tel:${contactPhone}`, action: 'call' },
+    { icon: FiMapPin, label: 'Location', value: contactAddress },
   ]
 
   return (
