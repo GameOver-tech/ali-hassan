@@ -1,30 +1,153 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { Helmet } from 'react-helmet-async'
-import { FiMail, FiPhone, FiMapPin, FiSend, FiCheck, FiLoader } from 'react-icons/fi'
+import { FiMail, FiPhone, FiMapPin, FiSend, FiCheck, FiLoader, FiCopy, FiArrowUpRight, FiExternalLink } from 'react-icons/fi'
 import SectionReveal from '../components/ui/SectionReveal'
 import { useApp } from '../context/AppContext'
 import { adminAPI } from '../services/api'
 import { staggerContainer, staggerItem } from '../animations/variants'
 
-function ContactCard({ item }) {
+// ── Premium Contact Card ──
+function ContactCard({ item, index }) {
+  const [copied, setCopied] = useState(false)
+
+  const handleCopy = useCallback(async (e) => {
+    if (item.action !== 'copy') return
+    e.preventDefault()
+    try {
+      await navigator.clipboard.writeText(item.value)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch { /* fallback */ }
+  }, [item])
+
+  const handleClick = useCallback((e) => {
+    if (item.action === 'copy') handleCopy(e)
+  }, [item, handleCopy])
+
   const inner = (
-    <div className="group flex items-center gap-3.5 p-[18px] rounded-xl border border-border-subtle bg-bg-card hover:border-accent/15 hover:bg-bg-elevated hover:shadow-glow transition-all duration-300">
-      <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center shrink-0 group-hover:bg-accent/20 transition-colors duration-300">
-        <item.icon className="text-accent" size={15} />
-      </div>
-      <div className="min-w-0 flex-1">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-text-secondary/70 mb-0.5">
+    <motion.div
+      onClick={handleClick}
+      className="group relative overflow-hidden rounded-xl border border-border-subtle bg-gradient-to-br from-bg-card via-bg-card to-bg-elevated p-[22px] cursor-pointer transition-all duration-400"
+      whileHover={{ y: -2, scale: 1.005 }}
+      whileTap={{ scale: 0.99 }}
+    >
+      {/* Hover glow sweep */}
+      <motion.span
+        className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+        style={{
+          background: 'linear-gradient(135deg, transparent 0%, rgba(0,240,255,0.03) 50%, transparent 100%)',
+        }}
+      />
+
+      {/* Glass inner border glow on hover */}
+      <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+        style={{ boxShadow: 'inset 0 0 0 1px rgba(0,240,255,0.1), 0 0 30px rgba(0,240,255,0.04)' }} />
+
+      <div className="relative space-y-3">
+        {/* Icon row */}
+        <div className="flex items-center justify-between">
+          <div className="w-[34px] h-[34px] rounded-lg bg-accent/8 flex items-center justify-center group-hover:bg-accent/15 transition-all duration-400"
+            style={{ boxShadow: '0 0 0 rgba(0,240,255,0)' }}>
+            <motion.div
+              animate={copied ? { rotate: [0, 10, -10, 0] } : {}}
+              transition={{ duration: 0.3 }}
+            >
+              <item.icon className="text-accent" size={14} />
+            </motion.div>
+          </div>
+
+          {/* Action indicator */}
+          {item.action === 'copy' && (
+            <motion.span
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={copied ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
+              className="text-[11px] font-medium text-accent-green flex items-center gap-1"
+            >
+              <FiCheck size={12} />
+              Copied
+            </motion.span>
+          )}
+          {item.action !== 'copy' && (
+            <span className="text-[11px] text-text-muted/40 group-hover:text-text-muted/70 transition-colors duration-300 flex items-center gap-1">
+              <span className="hidden sm:inline">{item.hint}</span>
+              <FiArrowUpRight size={12} className="group-hover:translate-x-[1px] group-hover:-translate-y-[1px] transition-transform duration-300" />
+            </span>
+          )}
+        </div>
+
+        {/* Label */}
+        <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-text-muted/50">
           {item.label}
         </p>
-        <p className="text-sm text-text-primary font-medium leading-snug truncate">
+
+        {/* Value */}
+        <p className="text-sm font-medium text-text-primary leading-snug">
           {item.value}
         </p>
       </div>
-    </div>
+    </motion.div>
   )
-  if (item.href) return <a href={item.href} className="block">{inner}</a>
+
+  if (item.href && item.action !== 'copy') {
+    return <a href={item.href} className="block">{inner}</a>
+  }
   return inner
+}
+
+// ── WhatsApp Premium Card ──
+function WhatsAppCard({ number }) {
+  return (
+    <motion.a
+      href={`https://wa.me/${number}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      whileHover={{ y: -2, scale: 1.005 }}
+      whileTap={{ scale: 0.98 }}
+      className="group relative overflow-hidden rounded-xl block"
+    >
+      {/* Animated gradient background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#25D366]/20 via-[#128C7E]/15 to-[#25D366]/5 transition-all duration-500 group-hover:from-[#25D366]/25 group-hover:via-[#128C7E]/20 group-hover:to-[#25D366]/10" />
+      <motion.div
+        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+        animate={{ background: ['radial-gradient(ellipse at 30% 20%, rgba(37,211,102,0.1), transparent)'] }}
+      />
+
+      {/* Border glow */}
+      <span className="absolute inset-0 rounded-xl border border-[#25D366]/20 group-hover:border-[#25D366]/35 transition-all duration-500" />
+      <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+        style={{ boxShadow: '0 0 40px rgba(37,211,102,0.08), inset 0 0 0 1px rgba(37,211,102,0.15)' }} />
+
+      <div className="relative p-[22px]">
+        <div className="flex items-start justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-[38px] h-[38px] rounded-lg bg-[#25D366]/12 flex items-center justify-center group-hover:bg-[#25D366]/20 transition-all duration-400"
+              style={{ boxShadow: '0 0 0 rgba(37,211,102,0)' }}>
+              <svg className="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="#25D366" aria-hidden="true">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+              </svg>
+            </div>
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-text-muted/50 mb-0.5">WhatsApp</p>
+              <p className="text-sm font-medium text-text-primary">Chat on WhatsApp</p>
+            </div>
+          </div>
+          <motion.div
+            className="w-7 h-7 rounded-full bg-[#25D366]/8 flex items-center justify-center group-hover:bg-[#25D366]/15 transition-all duration-400"
+            initial={false}
+          >
+            <FiArrowUpRight size={13} className="text-[#25D366] group-hover:translate-x-[1px] group-hover:-translate-y-[1px] transition-transform duration-300" />
+          </motion.div>
+        </div>
+
+        {/* Status */}
+        <div className="mt-3 flex items-center gap-2">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#25D366] animate-pulse-slow" />
+          <span className="text-[11px] text-text-muted/60 font-medium tracking-wide">Usually replies within a few hours</span>
+        </div>
+      </div>
+    </motion.a>
+  )
 }
 
 export default function Contact() {
@@ -54,9 +177,9 @@ export default function Contact() {
   }
 
   const contactItems = [
-    { icon: FiMail, label: 'Email', value: contactEmail, href: `mailto:${contactEmail}` },
-    { icon: FiPhone, label: 'Phone', value: contactPhone, href: `tel:${contactPhone}` },
-    { icon: FiMapPin, label: 'Location', value: contactAddress },
+    { icon: FiMail, label: 'Email', value: contactEmail, hint: 'Copy address', action: 'copy' },
+    { icon: FiPhone, label: 'Phone', value: contactPhone, href: `tel:${contactPhone}`, hint: 'Click to call' },
+    { icon: FiMapPin, label: 'Location', value: contactAddress, href: `https://maps.google.com/?q=${encodeURIComponent(contactAddress)}`, hint: 'Open Maps', external: true },
   ]
 
   return (
@@ -187,37 +310,25 @@ export default function Contact() {
               </div>
             </SectionReveal>
 
-            {/* ─── Right: Contact Info ─── */}
-            <div className="flex flex-col gap-5">
+            {/* ─── Right: Contact Info Cards ─── */}
+            <div className="flex flex-col gap-[18px]">
               <SectionReveal type="right" delay={0.15}>
                 <motion.div
                   variants={staggerContainer}
                   initial="hidden"
                   whileInView="visible"
                   viewport={{ once: true }}
-                  className="flex flex-col gap-5"
+                  className="flex flex-col gap-[18px]"
                 >
                   {contactItems.map((item, i) => (
                     <motion.div key={i} variants={staggerItem}>
-                      <ContactCard item={item} />
+                      <ContactCard item={item} index={i} />
                     </motion.div>
                   ))}
 
-                  {/* WhatsApp CTA */}
+                  {/* WhatsApp Card */}
                   <motion.div variants={staggerItem}>
-                    <motion.a
-                      href={`https://wa.me/${whatsappNumber}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      whileHover={{ scale: 1.01 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="group flex items-center justify-center gap-2.5 w-full h-[50px] rounded-xl border border-[#25D366]/25 bg-[#25D366]/[0.04] hover:bg-[#25D366]/[0.1] hover:border-[#25D366]/40 transition-all duration-300"
-                    >
-                      <svg className="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="#25D366" aria-hidden="true">
-                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-                      </svg>
-                      <span className="font-medium text-sm text-text-primary group-hover:text-[#25D366] transition-colors">Chat on WhatsApp</span>
-                    </motion.a>
+                    <WhatsAppCard number={whatsappNumber} />
                   </motion.div>
                 </motion.div>
               </SectionReveal>
