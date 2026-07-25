@@ -1,5 +1,5 @@
 import { useState, useEffect, Children, isValidElement } from 'react'
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 
 const variants = {
@@ -44,6 +44,7 @@ const wordReveal = {
 export default function SectionReveal({ children, className = '', delay = 0, type = 'fade', mode = 'container' }) {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.08 })
   const [isMobile, setIsMobile] = useState(false)
+  const prefersReducedMotion = useReducedMotion()
 
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 639px)')
@@ -52,6 +53,11 @@ export default function SectionReveal({ children, className = '', delay = 0, typ
     mq.addEventListener('change', handler)
     return () => mq.removeEventListener('change', handler)
   }, [])
+
+  // Respect reduced motion — skip animations entirely
+  if (prefersReducedMotion) {
+    return <div className={className}>{children}</div>
+  }
 
   const variant = variants[type] || variants.fade
   const yOffset = isMobile ? 20 : variant.hidden.y || 40

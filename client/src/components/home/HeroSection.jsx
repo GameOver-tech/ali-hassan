@@ -287,7 +287,7 @@ const HeroPortrait = memo(function HeroPortrait({ photoUrl }) {
             {/* Image */}
             <div className="relative h-full w-full overflow-hidden rounded-full bg-gradient-to-b from-bg-surface to-background p-[2px] shadow-elevated">
               <div className="h-full w-full rounded-full bg-bg-surface overflow-hidden">
-                {photoUrl ? <img src={photoUrl} alt="Ali Hassan" loading="eager" fetchpriority="high" decoding="async" width="440" height="440" className="h-full w-full rounded-full object-cover" />
+                {photoUrl ? <img src={photoUrl} alt="Portrait of Ali Hassan, AI Engineer" loading="eager" fetchpriority="high" decoding="async" width="440" height="440" className="h-full w-full rounded-full object-cover" />
                   : <div className="flex h-full w-full items-center justify-center text-4xl sm:text-6xl md:text-8xl font-heading font-bold text-gradient">AH</div>}
               </div>
             </div>
@@ -364,8 +364,8 @@ export default function HeroSection() {
         animate={{ scale: [1.2, 1, 1.2], rotate: [0, -20, 0] }} transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }} />
 
       {/* Parallax blobs */}
-      <div className="blob blob-1" style={{ transform: `translate(${(normalized.x - 0.5) * 24}px, ${(normalized.y - 0.5) * 24}px)`, willChange: 'transform' }} />
-      <div className="blob blob-2" style={{ transform: `translate(${(normalized.x - 0.5) * -24}px, ${(normalized.y - 0.5) * -24}px)`, willChange: 'transform' }} />
+      <div className="blob blob-1" aria-hidden="true" style={{ transform: `translate(${(normalized.x - 0.5) * 24}px, ${(normalized.y - 0.5) * 24}px)`, willChange: 'transform' }} />
+      <div className="blob blob-2" aria-hidden="true" style={{ transform: `translate(${(normalized.x - 0.5) * -24}px, ${(normalized.y - 0.5) * -24}px)`, willChange: 'transform' }} />
 
       <div className="relative w-full max-w-7xl mx-auto px-[clamp(16px,5vw,32px)] sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-8 lg:gap-16 items-center">
@@ -382,7 +382,7 @@ export default function HeroSection() {
               </motion.span>
             </motion.div>
 
-            {/* Headline with split text animation */}
+            {/* Headline with split text animation — h1 for name, h2 for title */}
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3, delay: 0.3 }}>
               <h1 className="text-[clamp(2rem,8vw,3rem)] sm:text-5xl lg:text-7xl xl:text-[5.5rem] font-heading font-bold leading-[1.1] sm:leading-[1] lg:leading-[0.95] tracking-[-0.03em] text-text-primary">
                 {heroName.split(' ').map((word, i) => (
@@ -393,15 +393,19 @@ export default function HeroSection() {
                     {word}
                   </motion.span>
                 ))}
-                <br />
-                <motion.span className="text-gradient-pulse inline-block"
-                  initial={{ opacity: 0, y: 40, scale: 0.9 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={{ duration: 0.6, delay: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}>
-                  {heroTitle}
-                </motion.span>
-                {heroSubtitle && <><br />{heroSubtitle}</>}
               </h1>
+              <motion.h2
+                className="text-gradient-pulse inline-block mt-2 text-[clamp(1.2rem,4vw,2rem)] sm:text-2xl lg:text-3xl font-heading font-bold"
+                initial={{ opacity: 0, y: 40, scale: 0.9 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 0.6, delay: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}>
+                {heroTitle}
+              </motion.h2>
+              {heroSubtitle && (
+                <motion.p className="text-text-muted mt-2 text-sm sm:text-base" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.9 }}>
+                  {heroSubtitle}
+                </motion.p>
+              )}
             </motion.div>
 
             <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.5 }}

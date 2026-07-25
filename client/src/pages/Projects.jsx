@@ -46,7 +46,7 @@ export default function Projects() {
     <>
       <Helmet><title>Portfolio | Ali Hassan</title></Helmet>
       <section className="relative overflow-hidden pb-[72px] sm:pb-20 pt-24 sm:pt-32">
-        <div className="blob blob-1" /><div className="blob blob-2" />
+        <div className="blob blob-1" aria-hidden="true" /><div className="blob blob-2" aria-hidden="true" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <SectionReveal type="scale"><div className="mx-auto mb-8 sm:mb-12 max-w-3xl text-center">
             <motion.span initial={{ opacity: 0, y: -10 }} whileInView={{ opacity: 1, y: 0 }} className="text-sm font-semibold uppercase tracking-[0.25em] text-text-muted">Portfolio</motion.span>
@@ -67,8 +67,10 @@ export default function Projects() {
           </div></SectionReveal>
 
           <SectionReveal type="blur"><motion.div className="mb-8 sm:mb-10 flex flex-col items-center justify-between gap-3 sm:gap-4 rounded-2xl border border-border-subtle bg-[#111827]/60 p-3 sm:p-4 md:flex-row md:p-4 shadow-card">
-            <div className="relative w-full md:w-64"><FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted" size={15} />
-              <input type="text" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder="Search projects..."
+            <div className="relative w-full md:w-64">
+              <label htmlFor="project-search" className="sr-only">Search projects</label>
+              <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted" size={15} aria-hidden="true" />
+              <input id="project-search" type="text" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder="Search projects..."
                 className="w-full rounded-full border border-border-subtle bg-bg-glass py-2 pl-10 pr-4 text-sm text-text-primary transition-colors focus:border-accent/30 focus:outline-none focus:ring-0 min-h-[40px] placeholder:text-text-muted" />
             </div>
             <div className="flex flex-wrap justify-center gap-1.5 w-full md:w-auto overflow-x-auto scrollbar-none">

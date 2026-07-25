@@ -21,7 +21,7 @@ export default function ProjectDetail() {
     <>
       <Helmet><title>{project.title} | Ali Hassan</title></Helmet>
       <section className="relative pb-[72px] sm:pb-20 pt-24 sm:pt-32 overflow-hidden">
-        <div className="blob blob-1" />
+        <div className="blob blob-1" aria-hidden="true" />
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
             <Link to="/projects" className="mb-8 inline-flex items-center space-x-2 text-text-muted transition-colors hover:text-accent"><FiArrowLeft /><span>Back to Projects</span></Link>

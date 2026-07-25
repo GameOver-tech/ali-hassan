@@ -193,10 +193,10 @@ export default function Contact() {
               >
                 {content.contact_subtitle || 'Contact'}
               </motion.span>
-              <h2 className="text-[clamp(1.5rem,4.5vw,2.5rem)] sm:text-4xl font-heading font-bold mt-3 mb-3 text-text-primary">
+              <h1 className="text-[clamp(1.5rem,4.5vw,2.5rem)] sm:text-4xl font-heading font-bold mt-3 mb-3 text-text-primary">
                 {content.contact_heading || "Let's Work Together"}{' '}
                 <span className="text-gradient">{content.contact_heading_highlight || 'Together'}</span>
-              </h2>
+              </h1>
               <p className="leading-relaxed text-sm text-text-muted max-w-lg mx-auto">
                 {content.contact_description || "Have an AI project in mind? Let's discuss how I can help."}
               </p>

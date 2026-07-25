@@ -67,7 +67,8 @@ export default function Navbar() {
   return (
     <>
       <motion.nav initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
-        className={`fixed top-0 left-0 right-0 z-30 transition-all duration-500 ${isScrolled ? 'bg-[rgba(8,10,16,0.85)] backdrop-blur-2xl border-b border-border-subtle shadow-[0_8px_32px_rgba(0,0,0,0.5)]' : 'bg-transparent'}`}>
+        className={`fixed top-0 left-0 right-0 z-30 transition-all duration-500 ${isScrolled ? 'bg-[rgba(8,10,16,0.85)] backdrop-blur-2xl border-b border-border-subtle shadow-[0_8px_32px_rgba(0,0,0,0.5)]' : 'bg-transparent'}`}
+        role="navigation" aria-label="Main navigation">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-14 md:h-16">
             {/* Animated logo */}

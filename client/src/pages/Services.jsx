@@ -45,7 +45,7 @@ export default function Services() {
     <>
       <Helmet><title>Services | Ali Hassan</title></Helmet>
       <section className="relative pt-24 sm:pt-32 pb-[72px] sm:pb-20 overflow-hidden">
-        <div className="blob blob-1" /><div className="blob blob-2" />
+        <div className="blob blob-1" aria-hidden="true" /><div className="blob blob-2" aria-hidden="true" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionReveal type="blur">
             <AnimatedHeading

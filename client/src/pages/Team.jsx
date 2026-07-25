@@ -15,7 +15,7 @@ export default function Team() {
     <>
       <Helmet><title>Team | Ali Hassan</title></Helmet>
       <section className="relative pt-24 sm:pt-32 pb-[72px] sm:pb-20 overflow-hidden">
-        <div className="blob blob-1" /><div className="blob blob-2" />
+        <div className="blob blob-1" aria-hidden="true" /><div className="blob blob-2" aria-hidden="true" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionReveal type="blur"><div className="text-center max-w-3xl mx-auto mb-10 sm:mb-16">
             <motion.span initial={{ opacity: 0, y: -10 }} whileInView={{ opacity: 1, y: 0 }} className="text-text-muted text-sm font-semibold tracking-[0.25em] uppercase">{content.team_subtitle || 'Team'}</motion.span>

@@ -55,7 +55,7 @@ function ProjectHero({ project }) {
   const tags = project.software?.split(',').map(s => s.trim()) || []
   return (
     <section className="relative pt-28 pb-[72px] sm:pb-12 overflow-hidden">
-      <div className="blob blob-1" /><div className="blob blob-2" /><div className="absolute inset-0 bg-gradient-to-b from-accent/3 via-transparent to-transparent pointer-events-none" />
+      <div className="blob blob-1" aria-hidden="true" /><div className="blob blob-2" aria-hidden="true" /><div className="absolute inset-0 bg-gradient-to-b from-accent/3 via-transparent to-transparent pointer-events-none" />
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.nav initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="flex items-center space-x-2 text-sm text-text-muted mb-8">
           <Link to="/" className="hover:text-accent transition-colors">Home</Link><span>/</span><Link to="/projects" className="hover:text-accent transition-colors">Projects</Link><span>/</span><span className="text-text-primary">{project.title}</span>
@@ -89,7 +89,7 @@ function RelatedProjects({ current, projects }) {
   const related = projects.filter(p => p.id !== current.id && p.category === current.category && p.status === 'published').slice(0, 3)
   if (related.length === 0) return null
   return (
-    <section className="py-20 relative overflow-hidden"><div className="blob blob-2 opacity-30" /><div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-20 relative overflow-hidden"><div className="blob blob-2 opacity-30" aria-hidden="true" /><div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <SectionReveal><div className="text-center mb-12"><h2 className="text-3xl md:text-4xl font-heading font-bold text-text-primary mb-4">Related <span className="text-gradient">Projects</span></h2><p className="text-text-muted max-w-xl mx-auto">Explore more work in this category</p></div></SectionReveal>
       <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true }} className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {related.map(p => (
@@ -111,7 +111,7 @@ function RelatedProjects({ current, projects }) {
 function CTASection() {
   const { siteSettings } = useApp(); const w = siteSettings?.whatsapp || '923102850365'
   return (
-    <section className="relative py-24 overflow-hidden"><div className="absolute inset-0 animated-grid opacity-15" /><div className="blob blob-1" style={{ top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }} />
+    <section className="relative py-24 overflow-hidden"><div className="absolute inset-0 animated-grid opacity-15" /><div className="blob blob-1" aria-hidden="true" style={{ top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }} />
       <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <SectionReveal><div className="rounded-3xl border border-border-subtle bg-[#111827]/80 p-8 md:p-12 shadow-card">
           <h2 className="text-3xl md:text-4xl font-heading font-semibold text-text-primary mb-4">Like the project?</h2>

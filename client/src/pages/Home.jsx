@@ -21,7 +21,7 @@ function HomeProjectCard({ project }) {
       className="card-premium group relative overflow-hidden rounded-2xl border border-border-subtle bg-bg-card shadow-card">
       <a href={externalUrl} target="_blank" rel="noopener noreferrer" aria-label={`View ${project.title} live site`} className="block" onClick={e => { if (externalUrl === '#') e.preventDefault() }}>
         <div className="relative aspect-[4/3] overflow-hidden bg-bg-surface">
-          <div className="absolute inset-0 flex items-center justify-center text-text-muted"><div className="flex flex-col items-center space-y-2"><FiImage size={28} /><span className="text-xs">No image</span></div></div>
+          <div className="absolute inset-0 flex items-center justify-center text-text-muted"><div className="flex flex-col items-center space-y-2"><FiImage size={28} aria-hidden="true" /><span className="text-xs">No image</span></div></div>
           {project.thumbnail_url && <img src={project.thumbnail_url} alt={project.title} className="absolute inset-0 z-10 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" onError={e => { e.target.style.display = 'none' }} />}
           <motion.div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20" />
         </div>
@@ -47,12 +47,12 @@ export default function Home() {
       <div className="overflow-x-hidden">
         <StatsSection />
 
-        <section className="section-padding relative overflow-hidden">
+        <section className="section-padding relative overflow-hidden" aria-labelledby="portfolio-heading">
         <div className="absolute inset-0 animated-grid opacity-15" /><div className="absolute inset-0 bg-gradient-soft" />
         <div className="relative max-w-7xl mx-auto">
           <SectionReveal type="scale"><div className="mb-8 sm:mb-14 text-center">
             <motion.span initial={{ opacity: 0, y: -10 }} whileInView={{ opacity: 1, y: 0 }} className="text-sm font-semibold uppercase tracking-[0.25em] text-text-muted block">{t.portfolio_subtitle || 'Portfolio'}</motion.span>
-            <h2 className="mt-4 text-[clamp(1.8rem,6vw,2.5rem)] sm:text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-text-primary">
+            <h2 id="portfolio-heading" className="mt-4 text-[clamp(1.8rem,6vw,2.5rem)] sm:text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-text-primary">
               <SectionReveal type="fade" mode="words">
                 {(t.portfolio_heading || 'Selected')}{' '}
               </SectionReveal>
@@ -109,7 +109,7 @@ export default function Home() {
 
       {testimonials?.length > 0 && (
         <section className="section-padding relative overflow-hidden">
-          <div className="blob blob-1" /><div className="blob blob-2" />
+          <div className="blob blob-1" aria-hidden="true" /><div className="blob blob-2" aria-hidden="true" />
           <div className="relative max-w-7xl mx-auto">
             <SectionReveal type="skew"><div className="mb-8 sm:mb-14 text-center">
               <span className="text-sm font-semibold uppercase tracking-[0.25em] text-text-muted">{t.testimonials_subtitle || 'Testimonials'}</span>

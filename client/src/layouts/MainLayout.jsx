@@ -14,10 +14,14 @@ export default function MainLayout() {
   if (loading) return <LoadingScreen />
   return (
     <div className="min-h-screen bg-background text-text-primary overflow-x-hidden">
+      {/* Skip link for keyboard users */}
+      <a href="#main-content" className="fixed -top-20 left-4 z-[9999] bg-accent text-background px-4 py-2 rounded-b-lg text-sm font-semibold focus:top-0 transition-all duration-300 focus:outline-none">
+        Skip to main content
+      </a>
       <div className="noise-overlay" />
       <CursorEffect />
       <Navbar />
-      <main>
+      <main id="main-content">
         <motion.div key={location.pathname} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}>
           <Outlet />
         </motion.div>

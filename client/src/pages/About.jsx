@@ -74,8 +74,8 @@ function ProfileImage({ photoUrl }) {
   return (
     <div className="relative mx-auto w-full max-w-xs sm:max-w-sm lg:max-w-md">
       {/* Abstract decorative circles behind */}
-      <div className="absolute -top-16 -right-16 w-48 h-48 rounded-full bg-accent/8 blur-[80px] animate-pulse-slow" />
-      <div className="absolute -bottom-12 -left-12 w-36 h-36 rounded-full bg-accent-neural/6 blur-[60px]" />
+      <div className="absolute -top-16 -right-16 w-48 h-48 rounded-full bg-accent/8 blur-[80px] animate-pulse-slow" aria-hidden="true" />
+      <div className="absolute -bottom-12 -left-12 w-36 h-36 rounded-full bg-accent-neural/6 blur-[60px]" aria-hidden="true" />
 
       {/* Animated gradient ring */}
       <motion.div className="absolute -inset-4 rounded-2xl opacity-20 blur-[60px]"
@@ -87,7 +87,7 @@ function ProfileImage({ photoUrl }) {
       <div className="relative w-full aspect-[4/5] max-h-[500px] overflow-hidden rounded-2xl border border-white/[0.08] bg-bg-surface shadow-2xl shadow-black/40">
         <div className="absolute inset-0 bg-gradient-to-t from-background/40 via-transparent to-transparent z-10" />
         {photoUrl ? (
-          <img src={photoUrl} alt="Ali Hassan" className="h-full w-full object-cover object-center transition-all duration-700 hover:scale-105" />
+          <img src={photoUrl} alt="Portrait of Ali Hassan, AI Engineer" className="h-full w-full object-cover object-center transition-all duration-700 hover:scale-105" />
         ) : (
           <div className="flex h-full w-full items-center justify-center text-5xl sm:text-7xl font-heading font-bold text-gradient">AH</div>
         )}

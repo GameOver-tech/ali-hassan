@@ -83,6 +83,7 @@
 - On dark-themed cards containing text content, use a clear contrast hierarchy: labels/headings in a muted tone (e.g., `text-text-muted` or `#94A3B8` with uppercase tracking) and the actual value/content in a high-visibility tone (e.g., `text-text-primary` or `#CBD5E1` white). This ensures data values are immediately legible while labels provide clean visual structure without competing for attention. Confidence: 0.85
 
 - Use `leading-tight` on headings on mobile so multi-line titles don't have excessive line-height spacing, creating a tighter, more polished appearance. Confidence: 0.70
+- **Hero/section headings must use proper semantic heading hierarchy**: the `<h1>` should contain ONLY the person's name (or the primary page identity), with the role/title as a separate `<h2>`, and any additional subtitle/intro text as a `<p>` element. Never bundle name + title + quotes/subtitle into a single `<h1>`. This ensures screen readers and search engines correctly interpret the content hierarchy. The visual styling (gradient text, split animations, size) can make the `<h2>` look as prominent as the `<h1>` without violating semantics. Confidence: 0.85
 
 - Certificate/certification viewer pages should not block screenshots or apply any security restrictions — users should be able to freely view, screenshot, and interact with certificates without blurred overlays, right-click blocking, keyboard shortcut prevention, or any other protection measures. Confidence: 0.85
 

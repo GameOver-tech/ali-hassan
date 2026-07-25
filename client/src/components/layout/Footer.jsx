@@ -35,7 +35,8 @@ export default function Footer() {
           <motion.div variants={staggerItem}><motion.h3 whileHover={{ x: 3 }} className="mb-5 text-sm font-heading font-semibold text-text-primary tracking-wide uppercase">Newsletter</motion.h3>
             <p className="mb-4 text-sm text-text-muted">Subscribe for AI insights and updates.</p>
             <form onSubmit={handleSubscribe} className="space-y-3">
-              <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="your@email.com" className="w-full rounded-xl border border-border-subtle bg-bg-glass px-4 min-h-[48px] text-sm text-text-primary placeholder:text-text-muted focus:border-accent/30 focus:outline-none focus:ring-0 transition-all duration-300" required />
+              <label htmlFor="footer-email" className="sr-only">Email for newsletter</label>
+              <input id="footer-email" type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="your@email.com" className="w-full rounded-xl border border-border-subtle bg-bg-glass px-4 min-h-[48px] text-sm text-text-primary placeholder:text-text-muted focus:border-accent/30 focus:outline-none focus:ring-0 transition-all duration-300" required />
               <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }} type="submit" disabled={status === 'loading'}
                 className="w-full rounded-xl bg-accent px-4 min-h-[48px] text-sm font-semibold text-background shadow-[0_0_20px_rgba(0,240,255,0.2)] transition-all duration-300 disabled:opacity-50 hover:shadow-[0_0_40px_rgba(0,240,255,0.35)] relative z-10">
                 {status === 'loading' ? 'Subscribing...' : 'Subscribe'}</motion.button>
