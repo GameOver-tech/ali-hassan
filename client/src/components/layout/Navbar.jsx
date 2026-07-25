@@ -71,13 +71,18 @@ export default function Navbar() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-14 md:h-16">
             {/* Animated logo */}
-            <motion.div whileHover={{ scale: 1.03 }} className="flex-shrink-0">
+             <motion.div whileHover={{ scale: 1.03 }} className="flex-shrink-0">
               <Link to="/" onClick={(e) => { close(); handleHomeClick(e) }}>
                 {logoImage ? <img src={logoImage} alt={logoText} className="h-7 md:h-9 w-auto" />
                   : <span className="text-lg md:text-xl font-heading font-bold text-gradient relative">
                       {logoText}
                       <motion.span className="absolute -inset-1 rounded-lg opacity-20 blur-sm" style={{ background: 'linear-gradient(135deg, #00F0FF, #7C3AED)' }}
-                        animate={{ opacity: [0.1, 0.3, 0.1] }} transition={{ duration: 2, repeat: Infinity }} />
+                        animate={isScrolled ? { opacity: [0.15, 0.4, 0.15], scale: [1, 1.1, 1] } : { opacity: [0.1, 0.3, 0.1] }}
+                        transition={{ duration: 2, repeat: Infinity }} />
+                      {isScrolled && (
+                        <motion.span className="absolute -inset-2 rounded-lg" style={{ background: 'radial-gradient(ellipse, rgba(0,240,255,0.1), transparent)', filter: 'blur(8px)' }}
+                          animate={{ opacity: [0, 0.4, 0] }} transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }} />
+                      )}
                     </span>}
               </Link>
             </motion.div>
@@ -87,7 +92,7 @@ export default function Navbar() {
               {navLinks.map((link, i) => (
                 <motion.div key={link.path} custom={i} variants={linkVariants} initial="hidden" animate="visible">
                   <Link to={link.path} onClick={link.path === '/' ? handleHomeClick : undefined}
-                    className={`relative px-3 py-1.5 text-sm font-medium transition-colors duration-300 whitespace-nowrap ${activeSection === link.path ? 'text-accent' : 'text-text-secondary hover:text-text-primary'}`}>
+                    className={`relative px-3 py-1.5 text-sm font-medium transition-all duration-300 whitespace-nowrap hover:tracking-[0.02em] ${activeSection === link.path ? 'text-accent' : 'text-text-secondary hover:text-text-primary'}`}>
                     {link.name}
                     {activeSection === link.path && (
                       <motion.div layoutId="nav-indicator" className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-accent shadow-[0_0_8px_rgba(0,240,255,0.5)]"

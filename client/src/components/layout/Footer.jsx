@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { FiMail, FiMapPin, FiPhone } from 'react-icons/fi'
+import { HiArrowUp } from 'react-icons/hi'
 import { FaWhatsapp, FaLinkedin, FaBehance, FaDribbble, FaTwitter, FaInstagram, FaFacebook, FaGithub, FaYoutube } from 'react-icons/fa'
 import { useApp } from '../../context/AppContext'
 import { adminAPI } from '../../services/api'
@@ -44,7 +45,27 @@ export default function Footer() {
           </motion.div>
         </motion.div>
         <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-border-subtle pt-8 sm:flex-row">
-          <p className="text-sm text-text-muted">{siteSettings?.copyright_text || `\u00A9 ${new Date().getFullYear()} ${siteSettings?.site_name || 'Ali Hassan'}. All rights reserved.`}</p>
+          <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-6">
+            <p className="text-sm text-text-muted">{siteSettings?.copyright_text || `\u00A9 ${new Date().getFullYear()} ${siteSettings?.site_name || 'Ali Hassan'}. All rights reserved.`}</p>
+            <span className="hidden sm:inline text-text-muted/30">|</span>
+            <motion.span
+              className="text-[11px] font-mono text-text-muted/50 flex items-center gap-1.5"
+              animate={{ opacity: [0.4, 0.7, 0.4] }}
+              transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+            >
+              <span className="w-1 h-1 rounded-full bg-accent-green" />
+              AI Engine v2.1 — All systems operational
+            </motion.span>
+          </div>
+          <motion.button
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            whileHover={{ scale: 1.1, y: -2 }}
+            whileTap={{ scale: 0.9 }}
+            className="flex items-center justify-center w-10 h-10 rounded-full border border-border-subtle bg-bg-glass text-text-muted hover:text-accent hover:border-accent/30 hover:shadow-[0_0_20px_rgba(0,240,255,0.15)] transition-all duration-300"
+            aria-label="Back to top"
+          >
+            <HiArrowUp size={16} />
+          </motion.button>
         </motion.div>
       </div>
     </footer>

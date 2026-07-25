@@ -48,7 +48,35 @@ body.no-scroll { overflow: hidden !important; position: fixed; width: 100%; }
 
 .animated-grid {
   background-image: linear-gradient(rgba(0,240,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,240,255,0.03) 1px, transparent 1px);
-  background-size: 56px 56px; animation: gridFlow 10s linear infinite;
+  background-size: 56px 56px;
+  animation: gridDrift 20s linear infinite;
+}
+
+@keyframes gridDrift {
+  0% { background-position: 0 0; }
+  100% { background-position: 56px 28px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animated-grid { animation: none; }
+  .card-premium:hover { transform: none !important; }
+  .blob, .blob-1, .blob-2 { animation: none !important; }
+}
+
+.card-premium {
+  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform: translateY(0) scale(1);
+}
+.card-premium:hover {
+  transform: translateY(-4px) scale(1.01);
+  border-color: rgba(0,240,255,0.15);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.5), 0 0 30px rgba(0,240,255,0.05);
+}
+
+/* Cursor trail dots */
+.cursor-trail {
+  position: fixed; border-radius: 50%; pointer-events: none; z-index: 9998;
+  background: rgba(0,240,255,0.15); transition: opacity 0.4s ease, transform 0.4s ease;
 }
 
 .noise-overlay::after {

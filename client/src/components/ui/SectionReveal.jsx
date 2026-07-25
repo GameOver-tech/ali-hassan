@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Children, isValidElement } from 'react'
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 
@@ -33,7 +33,15 @@ const variants = {
   },
 }
 
-export default function SectionReveal({ children, className = '', delay = 0, type = 'fade' }) {
+const wordReveal = {
+  hidden: { opacity: 0, y: 30, rotateX: -10 },
+  visible: (i) => ({
+    opacity: 1, y: 0, rotateX: 0,
+    transition: { delay: i * 0.06, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] },
+  }),
+}
+
+export default function SectionReveal({ children, className = '', delay = 0, type = 'fade', mode = 'container' }) {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.08 })
   const [isMobile, setIsMobile] = useState(false)
 
@@ -49,6 +57,30 @@ export default function SectionReveal({ children, className = '', delay = 0, typ
   const yOffset = isMobile ? 20 : variant.hidden.y || 40
   const dur = isMobile ? 0.5 : variant.visible.transition?.duration || 0.7
 
+  // Word-by-word mode
+  if (mode === 'words') {
+    const text = getTextContent(children)
+    if (!text) return <>{children}</>
+    const words = text.split(' ').filter(Boolean)
+    return (
+      <motion.div ref={ref} className={className}>
+        {words.map((word, i) => (
+          <motion.span
+            key={i}
+            className="inline-block mr-[0.15em]"
+            custom={i}
+            initial="hidden"
+            animate={inView ? 'visible' : 'hidden'}
+            variants={wordReveal}
+            style={{ perspective: 600 }}
+          >
+            {word}
+          </motion.span>
+        ))}
+      </motion.div>
+    )
+  }
+
   return (
     <motion.div
       ref={ref}
@@ -60,4 +92,15 @@ export default function SectionReveal({ children, className = '', delay = 0, typ
       {children}
     </motion.div>
   )
+}
+
+function getTextContent(node) {
+  if (typeof node === 'string') return node
+  if (typeof node === 'number') return String(node)
+  if (isValidElement(node) && node.props) {
+    const child = node.props.children
+    if (typeof child === 'string') return child
+    if (Array.isArray(child)) return child.map(getTextContent).join(' ')
+  }
+  return ''
 }

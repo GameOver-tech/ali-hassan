@@ -18,7 +18,7 @@ function HomeProjectCard({ project }) {
   const tags = project.software?.split(',').map(s => s.trim()) || []
   return (
     <motion.div whileHover={{ y: -8, scale: 1.02 }}
-      className="group relative overflow-hidden rounded-2xl border border-border-subtle bg-bg-card shadow-card transition-all duration-500 hover:border-accent/20 hover:shadow-glow-strong">
+      className="card-premium group relative overflow-hidden rounded-2xl border border-border-subtle bg-bg-card shadow-card">
       <a href={externalUrl} target="_blank" rel="noopener noreferrer" aria-label={`View ${project.title} live site`} className="block" onClick={e => { if (externalUrl === '#') e.preventDefault() }}>
         <div className="relative aspect-[4/3] overflow-hidden bg-bg-surface">
           <div className="absolute inset-0 flex items-center justify-center text-text-muted"><div className="flex flex-col items-center space-y-2"><FiImage size={28} /><span className="text-xs">No image</span></div></div>
@@ -53,15 +53,9 @@ export default function Home() {
           <SectionReveal type="scale"><div className="mb-8 sm:mb-14 text-center">
             <motion.span initial={{ opacity: 0, y: -10 }} whileInView={{ opacity: 1, y: 0 }} className="text-sm font-semibold uppercase tracking-[0.25em] text-text-muted block">{t.portfolio_subtitle || 'Portfolio'}</motion.span>
             <h2 className="mt-4 text-[clamp(1.8rem,6vw,2.5rem)] sm:text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-text-primary">
-              {(t.portfolio_heading || 'Selected').split(' ').map((word, i) => (
-                <motion.span key={i} className="inline-block mr-[0.15em]"
-                  initial={{ opacity: 0, y: 40, rotateX: -15 }}
-                  whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: i * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}>
-                  {word}
-                </motion.span>
-              ))}{' '}
+              <SectionReveal type="fade" mode="words">
+                {(t.portfolio_heading || 'Selected')}{' '}
+              </SectionReveal>
               <motion.span className="text-gradient inline-block"
                 initial={{ opacity: 0, scale: 0.7 }}
                 whileInView={{ opacity: 1, scale: 1 }}
@@ -86,12 +80,17 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <SectionReveal type="blur"><div className="mb-8 sm:mb-14 text-center">
             <span className="text-sm font-semibold uppercase tracking-[0.25em] text-text-muted">{t.services_subtitle || 'Expertise'}</span>
-            <h2 className="mt-4 text-[clamp(1.8rem,6vw,2.5rem)] sm:text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-text-primary">{t.services_heading || 'Services &'} <span className="text-gradient">{t.services_heading_highlight || 'Capabilities'}</span></h2>
+            <h2 className="mt-4 text-[clamp(1.8rem,6vw,2.5rem)] sm:text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-text-primary">
+              <SectionReveal type="fade" mode="words">
+                {t.services_heading || 'Services &'}
+              </SectionReveal>{' '}
+              <span className="text-gradient">{t.services_heading_highlight || 'Capabilities'}</span>
+            </h2>
           </div></SectionReveal>
           <motion.div variants={staggerContainerFast} initial="hidden" whileInView="visible" viewport={{ once: true }} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {services?.slice(0, 6).map((service, i) => (
               <motion.div key={service.id} variants={staggerItemScale}>
-                <motion.div whileHover={{ y: -6, scale: 1.02 }} className="group relative overflow-hidden rounded-2xl border border-border-subtle bg-[#111827] p-7 shadow-card transition-all duration-500 hover:border-accent/15 hover:shadow-glow">
+                <motion.div whileHover={{ y: -6, scale: 1.02 }} className="card-premium group relative overflow-hidden rounded-2xl border border-border-subtle bg-bg-card p-7 shadow-card">
                   <div className="absolute inset-0 bg-gradient-accent opacity-0 group-hover:opacity-5 transition-opacity duration-500" />
                   <div className="relative">
                     <motion.div className="mb-5 flex h-11 w-11 items-center justify-center rounded-xl bg-accent/10 text-accent shadow-[0_0_10px_rgba(0,240,255,0.1)]"
@@ -114,12 +113,17 @@ export default function Home() {
           <div className="relative max-w-7xl mx-auto">
             <SectionReveal type="skew"><div className="mb-8 sm:mb-14 text-center">
               <span className="text-sm font-semibold uppercase tracking-[0.25em] text-text-muted">{t.testimonials_subtitle || 'Testimonials'}</span>
-              <h2 className="mt-4 text-[clamp(1.8rem,6vw,2.5rem)] sm:text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-text-primary">{t.testimonials_heading || 'Client'} <span className="text-gradient">{t.testimonials_heading_highlight || 'Feedback'}</span></h2>
+              <h2 className="mt-4 text-[clamp(1.8rem,6vw,2.5rem)] sm:text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-text-primary">
+                <SectionReveal type="fade" mode="words">
+                  {t.testimonials_heading || 'Client'}
+                </SectionReveal>{' '}
+                <span className="text-gradient">{t.testimonials_heading_highlight || 'Feedback'}</span>
+              </h2>
             </div></SectionReveal>
             <Swiper modules={[Autoplay, Pagination]} spaceBetween={24} slidesPerView={1} breakpoints={{ 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }} autoplay={{ delay: 5000 }} pagination={{ clickable: true }} className="pb-14">
               {testimonials.map(t => (
                 <SwiperSlide key={t.id}>
-                  <motion.div whileHover={{ y: -4 }} className="rounded-2xl border border-border-subtle bg-[#111827] p-7 shadow-card hover:border-accent/10 transition-all duration-500">
+                  <motion.div whileHover={{ y: -4 }} className="card-premium rounded-2xl border border-border-subtle bg-bg-card p-7 shadow-card">
                     <div className="mb-4 flex items-center space-x-1">{[...Array(5)].map((_, i) => <motion.span key={i} className={`text-sm ${i < (t.rating || 5) ? 'text-accent' : 'text-white/10'}`} initial={{ opacity: 0, scale: 0 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.1 }}>★</motion.span>)}</div>
                     <p className="mb-6 text-sm leading-7 text-text-muted">"{t.content}"</p>
                     <div className="flex items-center space-x-3">
@@ -137,7 +141,7 @@ export default function Home() {
       <section className="section-padding relative overflow-hidden">
         <div className="max-w-4xl mx-auto text-center">
           <SectionReveal type="scale">
-            <motion.div className="rounded-2xl border border-border-subtle bg-gradient-to-br from-[#0d1117] via-[#111827] to-[#0d1117] p-6 sm:p-10 lg:p-16 shadow-card hover:shadow-[0_0_80px_rgba(0,240,255,0.06)] transition-shadow duration-700 relative overflow-hidden">
+            <motion.div className="card-premium rounded-2xl border border-border-subtle bg-gradient-to-br from-[#0d1117] via-[#111827] to-[#0d1117] p-6 sm:p-10 lg:p-16 shadow-card relative overflow-hidden">
               <div className="absolute top-0 -left-20 w-40 h-40 bg-accent/5 rounded-full blur-[80px]" />
               <div className="absolute bottom-0 -right-20 w-40 h-40 bg-accent-neural/5 rounded-full blur-[80px]" />
               <div className="relative">
