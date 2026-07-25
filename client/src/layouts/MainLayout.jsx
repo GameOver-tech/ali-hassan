@@ -22,7 +22,12 @@ export default function MainLayout() {
       <CursorEffect />
       <Navbar />
       <main id="main-content">
-        <motion.div key={location.pathname} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}>
+        <motion.div
+          key={location.pathname}
+          initial={{ opacity: 0, y: 30, scale: 0.98, filter: 'blur(4px)' }}
+          animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
+          transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+        >
           <Outlet />
         </motion.div>
       </main>

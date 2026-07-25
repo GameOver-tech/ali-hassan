@@ -43,7 +43,11 @@ export default function Projects() {
   const filteredProjects = (projects || []).filter(p => { const mc = activeCategory === 'All' || p.category === activeCategory; const ms = p.title?.toLowerCase().includes(searchQuery.toLowerCase()) || p.description?.toLowerCase().includes(searchQuery.toLowerCase()); return mc && ms })
 
   return (
-    <>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+    >
       <Helmet><title>Portfolio | Ali Hassan</title></Helmet>
       <section className="relative overflow-hidden pb-[72px] sm:pb-20 pt-24 sm:pt-32">
         <div className="blob blob-1" aria-hidden="true" /><div className="blob blob-2" aria-hidden="true" />
@@ -91,6 +95,6 @@ export default function Projects() {
           {filteredProjects.length === 0 && <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-2xl border border-border-subtle bg-bg-card/50 backdrop-blur-sm py-20 text-center shadow-card"><p className="text-lg text-text-muted">No projects found.</p></motion.div>}
         </div>
       </section>
-    </>
+    </motion.div>
   )
 }

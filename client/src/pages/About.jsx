@@ -240,7 +240,11 @@ export default function About() {
   const [activeTab, setActiveTab] = useState(location.state?.tab || 'experience')
 
   return (
-    <>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+    >
       <Helmet><title>About | Ali Hassan</title></Helmet>
 
       {/* ── Hero Section ── */}
@@ -401,6 +405,6 @@ export default function About() {
           </AnimatePresence>
         </div>
       </section>
-    </>
+    </motion.div>
   )
 }

@@ -73,9 +73,12 @@ export default function FloatingButtons() {
         )}
       </div>
 
-      {/* Desktop: floating column
-          Order (top to bottom): Scroll-to-top → Chatbot → WhatsApp */}
-      <div className="hidden sm:flex fixed flex-col items-center gap-3 z-[999]"
+      {/* Desktop: floating column — animated entrance */}
+      <motion.div
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.6, delay: 1.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+        className="hidden sm:flex fixed flex-col items-center gap-3 z-[999]"
         style={{ bottom: 'max(24px, calc(24px + env(safe-area-inset-bottom, 0px)))', right: 'max(16px, calc(16px + env(safe-area-inset-right, 0px)))' }}>
 
         {/* Scroll to top — top */}
@@ -112,7 +115,7 @@ export default function FloatingButtons() {
             <FaWhatsapp size={20} />
           </button>
         )}
-      </div>
+      </motion.div>
     </>
   )
 }

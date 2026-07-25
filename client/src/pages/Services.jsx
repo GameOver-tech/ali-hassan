@@ -42,7 +42,11 @@ export default function Services() {
   const serviceList = services || []
 
   return (
-    <>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+    >
       <Helmet><title>Services | Ali Hassan</title></Helmet>
       <section className="relative pt-24 sm:pt-32 pb-[72px] sm:pb-20 overflow-hidden">
         <div className="blob blob-1" aria-hidden="true" /><div className="blob blob-2" aria-hidden="true" />
@@ -104,6 +108,6 @@ export default function Services() {
           </motion.div>
         </div>
       </section>
-    </>
+    </motion.div>
   )
 }
