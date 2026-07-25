@@ -64,11 +64,13 @@ export default function FloatingButtons() {
           </button>
         )}
         {/* WhatsApp — bottom */}
-        <button onClick={openWA}
-          className="w-12 h-12 rounded-full bg-[#25D366] flex items-center justify-center text-white shadow-[0_0_20px_rgba(37,211,102,0.25)] transition-all active:scale-90"
-          aria-label="Contact via WhatsApp">
-          <FaWhatsapp size={22} />
-        </button>
+        {!chatbotOpen && (
+          <button onClick={openWA}
+            className="w-12 h-12 rounded-full bg-[#25D366] flex items-center justify-center text-white shadow-[0_0_20px_rgba(37,211,102,0.25)] transition-all active:scale-90"
+            aria-label="Contact via WhatsApp">
+            <FaWhatsapp size={22} />
+          </button>
+        )}
       </div>
 
       {/* Desktop: floating column
@@ -103,11 +105,13 @@ export default function FloatingButtons() {
         )}
 
         {/* WhatsApp — bottom */}
-        <button onClick={openWA}
-          className="w-12 h-12 rounded-full bg-[#25D366] flex items-center justify-center text-white shadow-[0_0_20px_rgba(37,211,102,0.25)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_40px_rgba(37,211,102,0.5)] active:scale-90"
-          aria-label="Contact via WhatsApp">
-          <FaWhatsapp size={20} />
-        </button>
+        {!chatbotOpen && (
+          <button onClick={openWA}
+            className="w-12 h-12 rounded-full bg-[#25D366] flex items-center justify-center text-white shadow-[0_0_20px_rgba(37,211,102,0.25)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_40px_rgba(37,211,102,0.5)] active:scale-90"
+            aria-label="Contact via WhatsApp">
+            <FaWhatsapp size={20} />
+          </button>
+        )}
       </div>
     </>
   )
