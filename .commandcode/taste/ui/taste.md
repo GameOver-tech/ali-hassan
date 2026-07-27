@@ -101,6 +101,8 @@
 
 - For dedicated viewer pages (certificates, credentials), prefer a slim top bar showing certificate metadata (title, issuer, date) above the content area rather than a left sidebar — the heading sits above the document, leaving the full width for the document. Confidence: 0.85
 
+- **Project/portfolio detail viewer pages must never display a raw PDF embed as the primary content** — instead, present project information as a polished, interactive UI experience (project title, description, tech stack badges, GitHub link, live demo link, screenshots, metadata) similar to the project modal pattern. Any associated PDF/paper/document should be available only as a secondary download button, not rendered inline as the main page feature. The raw PDF viewer experience feels unpolished and unprofessional; users expect a handsome, interactive project showcase rather than being dropped into a document reader. Confidence: 0.90
+
 - For dedicated viewer pages (certificates, credentials), remove any "Verify"/external link buttons that open content in a new tab. The viewer should be self-contained within the app with no way to navigate away to external sites. Confidence: 0.85
 
 - Certificate/document viewer pages should render edge-to-edge: fixed inset-0 with no padding, no margins, no border blocks, no card containers, no rounded corners, no external framing whatsoever — the content fills 100vw × 100vh with the background color extending to the absolute edges. All navigation chrome (back button, controls) should float as overlays on top of the content rather than taking up layout space. Confidence: 0.90
