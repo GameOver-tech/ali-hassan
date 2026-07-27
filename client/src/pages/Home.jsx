@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
@@ -5,6 +6,7 @@ import { FiArrowRight, FiImage } from 'react-icons/fi'
 import HeroSection from '../components/home/HeroSection'
 import StatsSection from '../components/home/StatsSection'
 import SectionReveal from '../components/ui/SectionReveal'
+import ProjectModal from '../components/ui/ProjectModal'
 import { useApp } from '../context/AppContext'
 import { staggerContainerFast, staggerItemScale, staggerItem } from '../animations/variants'
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -13,26 +15,38 @@ import 'swiper/css'
 import 'swiper/css/pagination'
 
 function HomeProjectCard({ project }) {
+  const [modalOpen, setModalOpen] = useState(false)
   const detailLink = project.pdf_url ? `/portfolio/${project.slug}` : `/projects/${project.slug}`
   const externalUrl = project.project_url || '#'
   const tags = project.software?.split(',').map(s => s.trim()) || []
+
+  const handleViewProject = e => {
+    if (project.github_url) {
+      e.preventDefault()
+      setModalOpen(true)
+    }
+  }
+
   return (
-    <motion.div whileHover={{ y: -8, scale: 1.02 }}
-      className="card-premium group relative overflow-hidden rounded-2xl border border-border-subtle bg-bg-card shadow-card">
-      <a href={externalUrl} target="_blank" rel="noopener noreferrer" aria-label={`View ${project.title} live site`} className="block" onClick={e => { if (externalUrl === '#') e.preventDefault() }}>
-        <div className="relative aspect-[4/3] overflow-hidden bg-bg-surface">
-          <div className="absolute inset-0 flex items-center justify-center text-text-muted"><div className="flex flex-col items-center space-y-2"><FiImage size={28} aria-hidden="true" /><span className="text-xs">No image</span></div></div>
-          {project.thumbnail_url && <img src={project.thumbnail_url} alt={project.title} className="absolute inset-0 z-10 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" onError={e => { e.target.style.display = 'none' }} />}
-          <motion.div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20" />
-        </div>
-      </a>
-      <Link to={detailLink} className="relative block p-5">
-        <motion.span initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="inline-flex rounded-full bg-accent/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.15em] text-accent shadow-[0_0_10px_rgba(0,240,255,0.1)]">{project.category || 'Featured'}</motion.span>
-        <h3 className="mt-3 text-lg font-heading font-semibold text-text-primary group-hover:text-accent transition-colors duration-300">{project.title}</h3>
-        {tags.length > 0 && <div className="mt-3 flex flex-wrap gap-1.5">{tags.slice(0, 3).map((tag, i) => <span key={i} className="px-2 py-0.5 rounded-md bg-white/5 text-xs text-text-muted border border-border-subtle">{tag}</span>)}</div>}
-        <div className="mt-4 flex items-center space-x-2 text-sm font-medium text-accent group-hover:translate-x-1 transition-transform duration-300"><span>View Project</span><FiArrowRight /></div>
-      </Link>
-    </motion.div>
+    <>
+      <motion.div whileHover={{ y: -8, scale: 1.02 }}
+        className="card-premium group relative overflow-hidden rounded-2xl border border-border-subtle bg-bg-card shadow-card">
+        <a href={externalUrl} target="_blank" rel="noopener noreferrer" aria-label={`View ${project.title} live site`} className="block" onClick={e => { if (externalUrl === '#') e.preventDefault() }}>
+          <div className="relative aspect-[4/3] overflow-hidden bg-bg-surface">
+            <div className="absolute inset-0 flex items-center justify-center text-text-muted"><div className="flex flex-col items-center space-y-2"><FiImage size={28} aria-hidden="true" /><span className="text-xs">No image</span></div></div>
+            {project.thumbnail_url && <img src={project.thumbnail_url} alt={project.title} className="absolute inset-0 z-10 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" onError={e => { e.target.style.display = 'none' }} />}
+            <motion.div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20" />
+          </div>
+        </a>
+        <Link to={detailLink} onClick={handleViewProject} className="relative block p-5">
+          <motion.span initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="inline-flex rounded-full bg-accent/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.15em] text-accent shadow-[0_0_10px_rgba(0,240,255,0.1)]">{project.category || 'Featured'}</motion.span>
+          <h3 className="mt-3 text-lg font-heading font-semibold text-text-primary group-hover:text-accent transition-colors duration-300">{project.title}</h3>
+          {tags.length > 0 && <div className="mt-3 flex flex-wrap gap-1.5">{tags.slice(0, 3).map((tag, i) => <span key={i} className="px-2 py-0.5 rounded-md bg-white/5 text-xs text-text-muted border border-border-subtle">{tag}</span>)}</div>}
+          <div className="mt-4 flex items-center space-x-2 text-sm font-medium text-accent group-hover:translate-x-1 transition-transform duration-300"><span>View Project</span><FiArrowRight /></div>
+        </Link>
+      </motion.div>
+      {modalOpen && <ProjectModal project={project} onClose={() => setModalOpen(false)} />}
+    </>
   )
 }
 

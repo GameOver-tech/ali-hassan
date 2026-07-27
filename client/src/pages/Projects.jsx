@@ -4,32 +4,45 @@ import { Link } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 import { FiSearch, FiArrowRight, FiImage } from 'react-icons/fi'
 import SectionReveal from '../components/ui/SectionReveal'
+import ProjectModal from '../components/ui/ProjectModal'
 import { staggerContainerFast, staggerItemScale } from '../animations/variants'
 import { useApp } from '../context/AppContext'
 import { supabase } from '../services/supabase'
 
 function ProjectCard({ project, i }) {
+  const [modalOpen, setModalOpen] = useState(false)
   const detailLink = project.pdf_url ? `/portfolio/${project.slug}` : `/projects/${project.slug}`
   const externalUrl = project.project_url || '#'
   const tags = project.software?.split(',').map(s => s.trim()) || []
+
+  const handleReadMore = e => {
+    if (project.github_url) {
+      e.preventDefault()
+      setModalOpen(true)
+    }
+  }
+
   return (
-    <motion.div layout initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -30 }} transition={{ duration: 0.5, delay: (i || 0) * 0.05 }}
-      whileHover={{ y: -6, scale: 1.02 }}
-      className="group relative overflow-hidden rounded-2xl border border-border-subtle bg-[#111827] shadow-card transition-all duration-500 hover:border-accent/20 hover:shadow-glow">
-      <a href={externalUrl} target="_blank" rel="noopener noreferrer" aria-label={`View ${project.title} live site`} className="block" onClick={e => { if (externalUrl === '#') e.preventDefault() }}>
-        <div className="relative aspect-[4/3] overflow-hidden bg-bg-surface">
-          <div className="absolute inset-0 flex items-center justify-center text-text-muted"><div className="flex flex-col items-center space-y-2"><FiImage size={36} /><span className="text-xs">No image</span></div></div>
-          {project.thumbnail_url && <img src={project.thumbnail_url} alt={project.title} className="absolute inset-0 z-10 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" onError={e => { e.target.style.display = 'none' }} />}
-          <motion.div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20" />
-        </div>
-      </a>
-      <Link to={detailLink} className="relative block p-5">
-        <motion.span initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="inline-flex rounded-full bg-accent/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.15em] text-accent shadow-[0_0_10px_rgba(0,240,255,0.1)]">{project.category || 'Uncategorized'}</motion.span>
-        <h3 className="mt-3 text-lg font-heading font-semibold text-text-primary break-words pr-2">{project.title}</h3>
-        {tags.length > 0 && <div className="mt-3 flex flex-wrap gap-1.5">{tags.slice(0, 3).map((tag, j) => <motion.span key={j} initial={{ opacity: 0, scale: 0 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ delay: j * 0.1 }} className="px-2 py-0.5 rounded-md bg-white/5 text-xs text-text-muted border border-border-subtle">{tag}</motion.span>)}</div>}
-        <div className="mt-4 flex items-center space-x-2 text-sm font-medium text-accent"><span>Read More</span><FiArrowRight /></div>
-      </Link>
-    </motion.div>
+    <>
+      <motion.div layout initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -30 }} transition={{ duration: 0.5, delay: (i || 0) * 0.05 }}
+        whileHover={{ y: -6, scale: 1.02 }}
+        className="group relative overflow-hidden rounded-2xl border border-border-subtle bg-[#111827] shadow-card transition-all duration-500 hover:border-accent/20 hover:shadow-glow">
+        <a href={externalUrl} target="_blank" rel="noopener noreferrer" aria-label={`View ${project.title} live site`} className="block" onClick={e => { if (externalUrl === '#') e.preventDefault() }}>
+          <div className="relative aspect-[4/3] overflow-hidden bg-bg-surface">
+            <div className="absolute inset-0 flex items-center justify-center text-text-muted"><div className="flex flex-col items-center space-y-2"><FiImage size={36} /><span className="text-xs">No image</span></div></div>
+            {project.thumbnail_url && <img src={project.thumbnail_url} alt={project.title} className="absolute inset-0 z-10 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" onError={e => { e.target.style.display = 'none' }} />}
+            <motion.div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20" />
+          </div>
+        </a>
+        <Link to={detailLink} onClick={handleReadMore} className="relative block p-5">
+          <motion.span initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="inline-flex rounded-full bg-accent/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.15em] text-accent shadow-[0_0_10px_rgba(0,240,255,0.1)]">{project.category || 'Uncategorized'}</motion.span>
+          <h3 className="mt-3 text-lg font-heading font-semibold text-text-primary break-words pr-2">{project.title}</h3>
+          {tags.length > 0 && <div className="mt-3 flex flex-wrap gap-1.5">{tags.slice(0, 3).map((tag, j) => <motion.span key={j} initial={{ opacity: 0, scale: 0 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ delay: j * 0.1 }} className="px-2 py-0.5 rounded-md bg-white/5 text-xs text-text-muted border border-border-subtle">{tag}</motion.span>)}</div>}
+          <div className="mt-4 flex items-center space-x-2 text-sm font-medium text-accent"><span>Read More</span><FiArrowRight /></div>
+        </Link>
+      </motion.div>
+      {modalOpen && <ProjectModal project={project} onClose={() => setModalOpen(false)} />}
+    </>
   )
 }
 
