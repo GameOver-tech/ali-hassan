@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Helmet } from 'react-helmet-async'
-import { FiArrowLeft, FiCalendar, FiAward, FiCheckCircle } from 'react-icons/fi'
+import { FiArrowLeft, FiExternalLink, FiCalendar, FiAward, FiCheckCircle } from 'react-icons/fi'
 import { useApp } from '../context/AppContext'
 import { supabase } from '../services/supabase'
 
@@ -11,7 +11,6 @@ export default function CertificateViewer() {
   const { certifications } = useApp()
   const [directCert, setDirectCert] = useState(null)
   const [loading, setLoading] = useState(true)
-  const [imageLoaded, setImageLoaded] = useState(false)
 
   const contextCert = certifications?.find(c => c.id === id) || null
   const cert = contextCert || directCert
@@ -104,32 +103,6 @@ export default function CertificateViewer() {
               <p className="text-base sm:text-lg text-accent font-medium">{cert.issuer}</p>
             </div>
 
-            {/* Certificate image card */}
-            {cert.image_url && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.2, duration: 0.5 }}
-                className="rounded-2xl border border-border-subtle bg-[#0a0c12] overflow-hidden shadow-elevated"
-              >
-                {!imageLoaded && (
-                  <div className="flex items-center justify-center h-64 sm:h-80 bg-bg-surface animate-pulse">
-                    <div className="flex flex-col items-center gap-2">
-                      <FiAward className="text-text-muted/30" size={32} />
-                      <p className="text-xs text-text-muted">Loading certificate...</p>
-                    </div>
-                  </div>
-                )}
-                <img
-                  src={cert.image_url}
-                  alt={cert.title}
-                  className={`w-full object-contain max-h-[70vh] sm:max-h-[80vh] ${imageLoaded ? 'block' : 'hidden'}`}
-                  onLoad={() => setImageLoaded(true)}
-                  onError={(e) => { e.target.style.display = 'none'; setImageLoaded(true) }}
-                />
-              </motion.div>
-            )}
-
             {/* Details card */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -166,6 +139,16 @@ export default function CertificateViewer() {
 
                 {/* Right column */}
                 <div className="space-y-6">
+                  {cert.credential_url && (
+                    <div>
+                      <h3 className="text-xs font-semibold text-text-muted uppercase tracking-wider mb-1">Credential</h3>
+                      <a href={cert.credential_url} target="_blank" rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent/10 text-accent text-sm font-medium border border-accent/20 hover:bg-accent/20 transition-all">
+                        <FiExternalLink size={14} />
+                        Verify Credential
+                      </a>
+                    </div>
+                  )}
                   <div className="flex items-center gap-2 text-xs text-text-muted">
                     <FiCheckCircle size={12} className="text-green-400" />
                     <span>Credential ID: {cert.id}</span>
