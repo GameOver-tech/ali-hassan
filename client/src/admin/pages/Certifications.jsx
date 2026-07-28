@@ -22,7 +22,7 @@ function getFileName(url) {
 
 export default function AdminCertifications() {
   const [items, setItems] = useState([])
-  const [form, setForm] = useState({ title: '', issuer: '', credential_url: '', issue_date: '', expiry_date: '', description: '', image_url: '', pdf_url: '', order: 0, active: true })
+  const [form, setForm] = useState({ title: '', issuer: '', issue_date: '', expiry_date: '', description: '', image_url: '', pdf_url: '', order: 0, active: true })
   const [editing, setEditing] = useState(null)
   const [showModal, setShowModal] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -47,7 +47,7 @@ export default function AdminCertifications() {
       if (editing) { await adminAPI.updateCertification(editing.id, payload); showToast('Certification updated!') }
       else { await adminAPI.createCertification(payload); showToast('Certification created!') }
       refreshSite(); setShowModal(false); setEditing(null)
-      setForm({ title: '', issuer: '', credential_url: '', issue_date: '', expiry_date: '', description: '', image_url: '', pdf_url: '', order: 0, active: true })
+      setForm({ title: '', issuer: '', issue_date: '', expiry_date: '', description: '', image_url: '', pdf_url: '', order: 0, active: true })
       fetchData()
     } catch (err) { showToast(err?.response?.data?.error || 'Error saving', 'error') }
     setLoading(false)
@@ -92,7 +92,6 @@ export default function AdminCertifications() {
         return <span className="text-text-muted text-xs">—</span>
       }
     },
-    { key: 'credential_url', label: 'Link', render: (v) => v ? <a href={v} target="_blank" rel="noopener noreferrer" className="text-accent hover:underline text-xs">View</a> : '-' },
     { key: 'active', label: 'Active', render: (v) => v ? <span className="text-accent">✓</span> : '-' },
   ]
 
@@ -100,7 +99,7 @@ export default function AdminCertifications() {
     <div>
       <div className="flex items-center justify-between mb-8">
         <h2 className="text-2xl font-heading font-bold">Certifications</h2>
-        <button onClick={() => { setForm({ title: '', issuer: '', credential_url: '', issue_date: '', expiry_date: '', description: '', image_url: '', pdf_url: '', order: 0, active: true }); setEditing(null); setShowModal(true) }}
+        <button onClick={() => { setForm({ title: '', issuer: '', issue_date: '', expiry_date: '', description: '', image_url: '', pdf_url: '', order: 0, active: true }); setEditing(null); setShowModal(true) }}
           className="px-6 py-2.5 bg-accent text-background font-semibold rounded-xl hover:shadow-[0_0_30px_rgba(0,240,255,0.3)] transition-all">Add Certification</button>
       </div>
       <DataTable columns={columns} data={items} onEdit={handleEdit} onDelete={handleDelete} searchPlaceholder="Search certifications..." />
@@ -110,10 +109,7 @@ export default function AdminCertifications() {
             <h3 className="text-xl font-heading font-bold mb-6">{editing ? 'Edit Certification' : 'Add Certification'}</h3>
             <form onSubmit={handleSave} className="space-y-4">
               <input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="Certification title" required className="w-full px-4 py-3 bg-bg-glass border border-border-subtle rounded-xl text-text-primary focus:outline-none focus:border-accent/30" />
-              <div className="grid grid-cols-2 gap-4">
-                <input value={form.issuer} onChange={(e) => setForm({ ...form, issuer: e.target.value })} placeholder="Issuer (e.g., AWS)" className="w-full px-4 py-3 bg-bg-glass border border-border-subtle rounded-xl text-text-primary focus:outline-none focus:border-accent/30" />
-                <input value={form.credential_url} onChange={(e) => setForm({ ...form, credential_url: e.target.value })} placeholder="Credential URL" className="w-full px-4 py-3 bg-bg-glass border border-border-subtle rounded-xl text-text-primary focus:outline-none focus:border-accent/30" />
-              </div>
+              <input value={form.issuer} onChange={(e) => setForm({ ...form, issuer: e.target.value })} placeholder="Issuer (e.g., AWS)" className="w-full px-4 py-3 bg-bg-glass border border-border-subtle rounded-xl text-text-primary focus:outline-none focus:border-accent/30" />
               <div className="grid grid-cols-2 gap-4">
                 <label className="text-sm text-text-muted">Issue Date
                   <input type="date" value={form.issue_date} onChange={(e) => setForm({ ...form, issue_date: e.target.value })} className="w-full mt-1 px-4 py-3 bg-bg-glass border border-border-subtle rounded-xl text-text-primary focus:outline-none focus:border-accent/30" />
