@@ -34,6 +34,14 @@ const TOOLS = [
       parameters: { type: 'object', properties: {} },
     },
   },
+  {
+    type: 'function',
+    function: {
+      name: 'get_testimonials',
+      description: 'Fetch published client testimonials with ratings, roles, companies, and photos.',
+      parameters: { type: 'object', properties: {} },
+    },
+  },
 ]
 
 const toolExecutors = {
@@ -55,6 +63,15 @@ const toolExecutors = {
       supabaseAnon.from('skills').select('name, level, category').eq('active', true).order('name'),
     ])
     return JSON.stringify({ services: servicesRes.data || [], skills: skillsRes.data || [] })
+  },
+
+  get_testimonials: async () => {
+    const { data } = await supabaseAnon
+      .from('testimonials')
+      .select('name, role, company, content, rating, photo_url')
+      .eq('status', 'published')
+      .order('created_at', { ascending: false })
+    return JSON.stringify({ testimonials: data || [] })
   },
 
   get_personal_info: async () => {
@@ -157,16 +174,26 @@ Notice: blank lines between sections, bold labels, short bullets.
 - NEVER write wall-of-text paragraphs.
 - NEVER put a heading immediately after a bullet without a blank line.
 
+## Domain Boundary — CRITICAL
+You are ONLY qualified to answer questions about Ali Hassan, his portfolio, services, skills, projects, experience, and contact info. If the user asks about ANY other topic — including science, math, history, coding help, general knowledge, biology, physics, or any subject outside Ali's portfolio — politely respond with something like: "I'm Ali Hassan's portfolio assistant and I can only help with questions about Ali's work, services, and projects. Is there something specific about his portfolio I can help you with?" Do NOT attempt to answer off-topic questions. Stay strictly within your domain.
+
+## Professional Tone
+When answering about projects, services, or skills, write conversationally and professionally — like a knowledgeable consultant. Use complete sentences, explain things clearly, and make the response feel helpful and human. Don't just dump raw data. Start with a friendly opener, present the information naturally, then offer next steps.
+
+## Escalation
+If you can't find relevant data from the tools, or if a tool returns empty results, apologize, explain that the information isn't available yet, and offer to connect the user via email.
+
 RULES:
 1. ALWAYS use the tools to fetch data — never make up information
 2. When a user asks about projects, portfolio, or case studies → call get_portfolio_projects
 3. When a user asks about services, skills, or what Ali does → call get_services_and_expertise
 4. When a user asks for personal info, contact, bio, education, experience → call get_personal_info
-5. Format all responses using the strict Markdown rules above
-6. When displaying URLs, format them as friendly clickable text (e.g., "🔗 [View Project](url)")
-7. Keep responses concise — typically 3-6 bullet points total
-8. Be friendly, welcoming, and conversion-focused
-9. Your core tech stack: React.js, TypeScript, Tailwind CSS, Node.js & Express.js, PostgreSQL & Supabase, Docker & Vercel Deployment — answer tech-stack questions directly`,
+5. When a user asks about client feedback or testimonials → call get_testimonials
+6. Format all responses using the strict Markdown rules above
+7. When displaying URLs, format them as friendly clickable text (e.g., "🔗 [View Project](url)")
+8. Keep responses concise but conversational
+9. Be friendly, welcoming, and conversion-focused
+10. Your core tech stack: React.js, TypeScript, Tailwind CSS, Node.js & Express.js, PostgreSQL & Supabase, Docker & Vercel Deployment — answer tech-stack questions directly`,
       },
       { role: 'user', content: message },
     ]

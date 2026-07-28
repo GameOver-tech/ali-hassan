@@ -51,11 +51,18 @@ function HomeProjectCard({ project }) {
 }
 
 export default function Home() {
-  const { projects, services, testimonials, siteSettings } = useApp()
+  const { projects, services, testimonials, siteSettings, seoData } = useApp()
   const t = siteSettings?.section_titles || {}
   return (
     <>
-      <Helmet><title>{t.home_title || 'Ali Hassan | AI Engineer'}</title><meta name="description" content={t.home_description || 'AI Engineer building production-grade AI systems, web applications, and intelligent software.'} /></Helmet>
+      <Helmet>
+        <title>{seoData?.meta_title || t.home_title || 'Ali Hassan | AI Engineer'}</title>
+        <meta name="description" content={seoData?.meta_description || t.home_description || 'AI Engineer building production-grade AI systems, web applications, and intelligent software.'} />
+        {seoData?.keywords && <meta name="keywords" content={seoData.keywords} />}
+        {seoData?.og_title && <meta property="og:title" content={seoData.og_title} />}
+        {seoData?.og_description && <meta property="og:description" content={seoData.og_description} />}
+        {seoData?.og_image && <meta property="og:image" content={seoData.og_image} />}
+      </Helmet>
       <HeroSection />
 
       <div className="overflow-x-hidden">
@@ -141,7 +148,11 @@ export default function Home() {
                     <div className="mb-4 flex items-center space-x-1">{[...Array(5)].map((_, i) => <motion.span key={i} className={`text-sm ${i < (t.rating || 5) ? 'text-accent' : 'text-white/10'}`} initial={{ opacity: 0, scale: 0 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.1 }}>★</motion.span>)}</div>
                     <p className="mb-6 text-sm leading-7 text-text-muted">"{t.content}"</p>
                     <div className="flex items-center space-x-3">
-                      <motion.div className="flex h-9 w-9 items-center justify-center rounded-full bg-accent text-sm font-semibold text-background shadow-[0_0_10px_rgba(0,240,255,0.2)]" whileHover={{ scale: 1.15 }}>{t.name?.[0]}</motion.div>
+                      {t.photo_url ? (
+                        <img src={t.photo_url} alt={t.name} className="h-9 w-9 rounded-full object-cover" />
+                      ) : (
+                        <motion.div className="flex h-9 w-9 items-center justify-center rounded-full bg-accent text-sm font-semibold text-background shadow-[0_0_10px_rgba(0,240,255,0.2)]" whileHover={{ scale: 1.15 }}>{t.name?.[0]}</motion.div>
+                      )}
                       <div><p className="text-sm font-medium text-text-primary">{t.name}</p><p className="text-xs text-text-muted">{t.role} &bull; {t.company}</p></div>
                     </div>
                   </motion.div>

@@ -15,6 +15,7 @@ export function AppProvider({ children }) {
   const [socialLinks, setSocialLinks] = useState([])
   const [heroData, setHeroData] = useState(null)
   const [aboutData, setAboutData] = useState(null)
+  const [seoData, setSeoData] = useState(null)
   const [stats, setStats] = useState([])
   const [services, setServices] = useState([])
   const [projects, setProjects] = useState([])
@@ -37,11 +38,12 @@ export function AppProvider({ children }) {
   }, [])
 
   const loadAllData = useCallback(async () => {
-    const [settingsRes, heroRes, aboutRes, chatbotConfigRes] = await Promise.all([
+    const [settingsRes, heroRes, aboutRes, chatbotConfigRes, seoRes] = await Promise.all([
       safeSingle('settings'),
       safeSingle('hero'),
       safeSingle('about'),
       safeSingle('chatbot_config'),
+      safeSingle('seo'),
     ])
 
     const [
@@ -77,6 +79,7 @@ export function AppProvider({ children }) {
     if (heroRes) setHeroData(heroRes)
     if (aboutRes) setAboutData(aboutRes)
     if (chatbotConfigRes) setChatbotConfig(chatbotConfigRes)
+    if (seoRes) setSeoData(seoRes)
     if (statsRes) setStats(statsRes)
     if (servicesRes) setServices(servicesRes)
     if (projectsRes) setProjects(projectsRes)
@@ -127,6 +130,7 @@ export function AppProvider({ children }) {
       socialLinks,
       heroData,
       aboutData,
+      seoData,
       stats,
       services,
       projects,

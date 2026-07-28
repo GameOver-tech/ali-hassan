@@ -324,6 +324,46 @@ function MetricsStrip() {
   )
 }
 
+// ── Typing Animation for rotating titles ──
+function TypingAnimation({ titles, fallbackTitle }) {
+  const [displayText, setDisplayText] = useState('')
+  const [titleIndex, setTitleIndex] = useState(0)
+  const [charIndex, setCharIndex] = useState(0)
+  const [isDeleting, setIsDeleting] = useState(false)
+  const timeoutRef = useRef(null)
+
+  const list = titles?.length ? titles : [fallbackTitle]
+
+  useEffect(() => {
+    if (list.length === 0) return
+
+    const currentTitle = list[titleIndex % list.length]
+    if (!currentTitle) return
+
+    if (!isDeleting && charIndex < currentTitle.length) {
+      timeoutRef.current = setTimeout(() => {
+        setDisplayText(currentTitle.slice(0, charIndex + 1))
+        setCharIndex(c => c + 1)
+      }, 80)
+    } else if (!isDeleting && charIndex === currentTitle.length) {
+      // Pause at full text
+      timeoutRef.current = setTimeout(() => setIsDeleting(true), 2000)
+    } else if (isDeleting && charIndex > 0) {
+      timeoutRef.current = setTimeout(() => {
+        setDisplayText(currentTitle.slice(0, charIndex - 1))
+        setCharIndex(c => c - 1)
+      }, 40)
+    } else if (isDeleting && charIndex === 0) {
+      setIsDeleting(false)
+      setTitleIndex(i => i + 1)
+    }
+
+    return () => clearTimeout(timeoutRef.current)
+  }, [charIndex, isDeleting, titleIndex, list])
+
+  return <>{displayText}<span className="animate-pulse text-accent">|</span></>
+}
+
 export default function HeroSection() {
   const { normalized } = useMousePosition()
   const { heroData } = useApp()
@@ -333,6 +373,7 @@ export default function HeroSection() {
   const heroName = heroData?.name || 'Ali Hassan'
   const heroTitle = heroData?.title || 'Graphic Designer'
   const heroSubtitle = heroData?.subtitle || ''
+  const typingTitles = heroData?.typing_titles
 
   return (
     <section className="relative min-h-[100dvh] pt-28 md:pt-32 flex items-center overflow-hidden scanlines" style={{ paddingBottom: 'max(5rem, env(safe-area-inset-bottom, 0px))' }}>
@@ -399,7 +440,7 @@ export default function HeroSection() {
                 initial={{ opacity: 0, y: 40, scale: 0.9 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{ duration: 0.6, delay: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}>
-                {heroTitle}
+                <TypingAnimation titles={typingTitles} fallbackTitle={heroTitle} />
               </motion.h2>
               {heroSubtitle && (
                 <motion.p className="text-text-muted mt-2 text-sm sm:text-base" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.9 }}>
