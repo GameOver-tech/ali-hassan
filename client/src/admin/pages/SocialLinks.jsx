@@ -18,7 +18,7 @@ export default function AdminSocialLinks() {
   useEffect(() => { fetchData() }, [])
 
   const fetchData = async () => {
-    try { const data = await adminAPI.getSocialLinks(); setLinks(data) } catch {}
+    try { const data = await adminAPI.getSocialLinks(); setLinks(data) } catch (err) { showToast(err?.response?.data?.error || 'Error loading', 'error') }
   }
 
   const toggleActive = async (item) => {
@@ -26,8 +26,8 @@ export default function AdminSocialLinks() {
       await adminAPI.updateSocialLink(item.id, { active: !item.active })
       refreshSite()
       fetchData()
-    } catch {
-      showToast('Error updating social link', 'error')
+    } catch (err) {
+      showToast(err?.response?.data?.error || 'Error updating social link', 'error')
     }
   }
 
@@ -35,7 +35,9 @@ export default function AdminSocialLinks() {
     try {
       await adminAPI.updateSocialLink(item.id, { url })
       refreshSite()
-    } catch {}
+    } catch (err) {
+      showToast(err?.response?.data?.error || 'Error updating URL', 'error')
+    }
     fetchData()
   }
 
@@ -50,8 +52,8 @@ export default function AdminSocialLinks() {
       setNewLink({ platform: '', url: '' })
       setShowAdd(false)
       fetchData()
-    } catch {
-      showToast('Error adding social link', 'error')
+    } catch (err) {
+      showToast(err?.response?.data?.error || 'Error adding social link', 'error')
     }
     setLoading(false)
   }
@@ -63,8 +65,8 @@ export default function AdminSocialLinks() {
       showToast('Social link deleted!')
       refreshSite()
       fetchData()
-    } catch {
-      showToast('Error deleting social link', 'error')
+    } catch (err) {
+      showToast(err?.response?.data?.error || 'Error deleting social link', 'error')
     }
   }
 

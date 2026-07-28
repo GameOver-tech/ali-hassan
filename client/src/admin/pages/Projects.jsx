@@ -6,8 +6,8 @@ import { refreshSite } from '../../utils/refresh'
 
 const defaultForm = {
   title: '', slug: '', description: '', category: '', client: '', duration: '',
-  software: '', thumbnail_url: '', project_url: '', case_study_url: '', github_url: '',
-  pdf_url: '', problem: '', solution: '', status: 'published', featured: false
+  software: '', thumbnail_url: '', project_url: '', github_url: '',
+  problem: '', solution: '', status: 'published', featured: false
 }
 
 function generateSlug(title) {
@@ -93,9 +93,7 @@ export default function AdminProjects() {
       software: item.software || '',
       thumbnail_url: item.thumbnail_url || '',
       project_url: item.project_url || '',
-      case_study_url: item.case_study_url || '',
       github_url: item.github_url || '',
-      pdf_url: item.pdf_url || '',
       problem: item.problem || '',
       solution: item.solution || '',
       status: item.status || 'published',
@@ -113,7 +111,7 @@ export default function AdminProjects() {
       refreshSite()
       fetchData()
     } catch (err) {
-      showToast('Error deleting project', 'error')
+      showToast(err?.response?.data?.error || 'Error deleting project', 'error')
     }
   }
 
@@ -201,25 +199,13 @@ export default function AdminProjects() {
                 <input value={form.thumbnail_url} onChange={(e) => setForm({ ...form, thumbnail_url: e.target.value })} placeholder="https://..." className={inputClass} />
                 {form.thumbnail_url && <img src={form.thumbnail_url} alt="preview" className="mt-2 w-32 h-20 rounded-lg object-cover" />}
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs text-text-muted mb-1">Project URL</label>
-                  <input value={form.project_url} onChange={(e) => setForm({ ...form, project_url: e.target.value })} placeholder="https://..." className={inputClass} />
-                </div>
-                <div>
-                  <label className="block text-xs text-text-muted mb-1">Case Study URL</label>
-                  <input value={form.case_study_url} onChange={(e) => setForm({ ...form, case_study_url: e.target.value })} placeholder="https://..." className={inputClass} />
-                </div>
+              <div>
+                <label className="block text-xs text-text-muted mb-1">Project URL</label>
+                <input value={form.project_url} onChange={(e) => setForm({ ...form, project_url: e.target.value })} placeholder="https://..." className={inputClass} />
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs text-text-muted mb-1">GitHub URL</label>
-                  <input value={form.github_url} onChange={(e) => setForm({ ...form, github_url: e.target.value })} placeholder="https://github.com/..." className={inputClass} />
-                </div>
-                <div>
-                  <label className="block text-xs text-text-muted mb-1">PDF URL</label>
-                  <input value={form.pdf_url} onChange={(e) => setForm({ ...form, pdf_url: e.target.value })} placeholder="https://..." className={inputClass} />
-                </div>
+              <div>
+                <label className="block text-xs text-text-muted mb-1">GitHub URL</label>
+                <input value={form.github_url} onChange={(e) => setForm({ ...form, github_url: e.target.value })} placeholder="https://github.com/..." className={inputClass} />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>

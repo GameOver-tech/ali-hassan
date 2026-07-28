@@ -14,26 +14,32 @@ export default function AdminExperience() {
   useEffect(() => { fetchData() }, [])
 
   const fetchData = async () => {
-    try { const data = await adminAPI.getExperience(); setItems(data || []) } catch {}
+    try { const data = await adminAPI.getExperience(); setItems(data || []) } catch (err) { showToast(err?.response?.data?.error || 'Error loading', 'error') }
   }
 
   const handleSave = async (e) => {
     e.preventDefault()
     setLoading(true)
     try {
-      if (editing) { await adminAPI.updateExperience(editing.id, form); showToast('Experience updated!') }
-      else { await adminAPI.createExperience(form); showToast('Experience created!') }
+      // Convert empty date strings to null so Supabase DATE columns don't reject them
+      const payload = {
+        ...form,
+        start_date: form.start_date || null,
+        end_date: form.end_date || null,
+      }
+      if (editing) { await adminAPI.updateExperience(editing.id, payload); showToast('Experience updated!') }
+      else { await adminAPI.createExperience(payload); showToast('Experience created!') }
       refreshSite(); setShowModal(false); setEditing(null)
       setForm({ title: '', company: '', location: '', start_date: '', end_date: '', description: '', current: false, order: 0 })
       fetchData()
-    } catch { showToast('Error saving', 'error') }
+    } catch (err) { showToast(err?.response?.data?.error || 'Error saving', 'error') }
     setLoading(false)
   }
 
   const handleEdit = (item) => { setForm(item); setEditing(item); setShowModal(true) }
   const handleDelete = async (item) => {
     if (!confirm('Delete this experience entry?')) return
-    try { await adminAPI.deleteExperience(item.id); showToast('Deleted!'); refreshSite(); fetchData() } catch { showToast('Error deleting', 'error') }
+    try { await adminAPI.deleteExperience(item.id); showToast('Deleted!'); refreshSite(); fetchData() } catch (err) { showToast(err?.response?.data?.error || 'Error deleting', 'error') }
   }
 
   const columns = [

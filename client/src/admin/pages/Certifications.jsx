@@ -32,26 +32,31 @@ export default function AdminCertifications() {
   useEffect(() => { fetchData() }, [])
 
   const fetchData = async () => {
-    try { const data = await adminAPI.getCertifications(); setItems(data || []) } catch {}
+    try { const data = await adminAPI.getCertifications(); setItems(data || []) } catch (err) { showToast(err?.response?.data?.error || 'Error loading', 'error') }
   }
 
   const handleSave = async (e) => {
     e.preventDefault()
     setLoading(true)
     try {
-      if (editing) { await adminAPI.updateCertification(editing.id, form); showToast('Certification updated!') }
-      else { await adminAPI.createCertification(form); showToast('Certification created!') }
+      const payload = {
+        ...form,
+        issue_date: form.issue_date || null,
+        expiry_date: form.expiry_date || null,
+      }
+      if (editing) { await adminAPI.updateCertification(editing.id, payload); showToast('Certification updated!') }
+      else { await adminAPI.createCertification(payload); showToast('Certification created!') }
       refreshSite(); setShowModal(false); setEditing(null)
       setForm({ title: '', issuer: '', credential_url: '', issue_date: '', expiry_date: '', description: '', image_url: '', pdf_url: '', order: 0, active: true })
       fetchData()
-    } catch { showToast('Error saving', 'error') }
+    } catch (err) { showToast(err?.response?.data?.error || 'Error saving', 'error') }
     setLoading(false)
   }
 
   const handleEdit = (item) => { setForm(item); setEditing(item); setShowModal(true) }
   const handleDelete = async (item) => {
     if (!confirm('Delete this certification?')) return
-    try { await adminAPI.deleteCertification(item.id); showToast('Deleted!'); refreshSite(); fetchData() } catch { showToast('Error deleting', 'error') }
+    try { await adminAPI.deleteCertification(item.id); showToast('Deleted!'); refreshSite(); fetchData() } catch (err) { showToast(err?.response?.data?.error || 'Error deleting', 'error') }
   }
 
   const handleFileUpload = async (e) => {
@@ -69,8 +74,8 @@ export default function AdminCertifications() {
         }
         showToast('File uploaded!')
       }
-    } catch {
-      showToast('Upload failed', 'error')
+    } catch (err) {
+      showToast(err?.response?.data?.error || 'Upload failed', 'error')
     }
     setUploading(false)
     if (fileInputRef.current) fileInputRef.current.value = ''

@@ -4,7 +4,7 @@ import {
   FiGrid, FiUser, FiBriefcase, FiFolder, FiLayers, FiCode,
   FiUsers, FiMail, FiSend, FiSettings, FiLink, FiMessageSquare,
   FiSearch, FiLogOut, FiTrendingUp, FiCpu, FiHelpCircle,
-  FiBookOpen, FiAward, FiMenu, FiX
+  FiBookOpen, FiAward, FiStar, FiMenu, FiX
 } from 'react-icons/fi'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -21,6 +21,7 @@ const menuItems = [
   { path: '/admin/education', icon: FiBookOpen, label: 'Education' },
   { path: '/admin/certifications', icon: FiAward, label: 'Certifications' },
   { path: '/admin/team', icon: FiUsers, label: 'Team' },
+  { path: '/admin/testimonials', icon: FiStar, label: 'Testimonials' },
   { path: '/admin/faqs', icon: FiHelpCircle, label: 'FAQs' },
   { path: '/admin/process', icon: FiTrendingUp, label: 'Process' },
   { path: '/admin/ai-providers', icon: FiCpu, label: 'AI Providers' },

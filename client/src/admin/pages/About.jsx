@@ -38,7 +38,7 @@ export default function AdminAbout() {
       showToast('About section saved!')
       refreshSite()
     } catch (err) {
-      showToast('Error saving about section', 'error')
+      showToast(err?.response?.data?.error || 'Error saving about section', 'error')
       console.error('About save error:', err)
     } finally {
       setLoading(false)

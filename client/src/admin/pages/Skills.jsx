@@ -14,7 +14,7 @@ export default function AdminSkills() {
   useEffect(() => { fetchData() }, [])
 
   const fetchData = async () => {
-    try { const data = await adminAPI.getSkills(); setSkills(data) } catch {}
+    try { const data = await adminAPI.getSkills(); setSkills(data) } catch (err) { showToast(err?.response?.data?.error || 'Error loading', 'error') }
   }
 
   const handleSave = async (e) => {
@@ -24,7 +24,7 @@ export default function AdminSkills() {
       if (editing) { await adminAPI.updateSkill(editing.id, form); showToast('Skill updated!') }
       else { await adminAPI.createSkill(form); showToast('Skill created!') }
       refreshSite(); setShowModal(false); setForm({ name: '', level: 80, category: '', active: true }); setEditing(null); fetchData()
-    } catch { showToast('Error saving skill', 'error') }
+    } catch (err) { showToast(err?.response?.data?.error || 'Error saving skill', 'error') }
     setLoading(false)
   }
 
@@ -32,7 +32,7 @@ export default function AdminSkills() {
   const handleDelete = async (item) => {
     if (!confirm('Delete this skill?')) return
     try { await adminAPI.deleteSkill(item.id); showToast('Skill deleted!'); refreshSite(); fetchData() }
-    catch { showToast('Error deleting skill', 'error') }
+    catch (err) { showToast(err?.response?.data?.error || 'Error deleting skill', 'error') }
   }
 
   const columns = [

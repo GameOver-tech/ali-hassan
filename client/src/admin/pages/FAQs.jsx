@@ -14,7 +14,7 @@ export default function AdminFAQs() {
   useEffect(() => { fetchData() }, [])
 
   const fetchData = async () => {
-    try { const data = await adminAPI.getFAQs(); setItems(data || []) } catch {}
+    try { const data = await adminAPI.getFAQs(); setItems(data || []) } catch (err) { showToast(err?.response?.data?.error || 'Error loading', 'error') }
   }
 
   const handleSave = async (e) => {
@@ -26,14 +26,14 @@ export default function AdminFAQs() {
       refreshSite(); setShowModal(false); setEditing(null)
       setForm({ question: '', answer: '', category: 'General', order: 0, active: true })
       fetchData()
-    } catch { showToast('Error saving', 'error') }
+    } catch (err) { showToast(err?.response?.data?.error || 'Error saving', 'error') }
     setLoading(false)
   }
 
   const handleEdit = (item) => { setForm(item); setEditing(item); setShowModal(true) }
   const handleDelete = async (item) => {
     if (!confirm('Delete this FAQ?')) return
-    try { await adminAPI.deleteFAQ(item.id); showToast('Deleted!'); refreshSite(); fetchData() } catch { showToast('Error deleting', 'error') }
+    try { await adminAPI.deleteFAQ(item.id); showToast('Deleted!'); refreshSite(); fetchData() } catch (err) { showToast(err?.response?.data?.error || 'Error deleting', 'error') }
   }
 
   const columns = [

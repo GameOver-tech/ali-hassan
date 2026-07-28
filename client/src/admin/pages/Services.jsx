@@ -16,7 +16,7 @@ export default function AdminServices() {
   useEffect(() => { fetchData() }, [])
 
   const fetchData = async () => {
-    try { const data = await adminAPI.getServices(); setServices(data) } catch {}
+    try { const data = await adminAPI.getServices(); setServices(data) } catch (err) { showToast(err?.response?.data?.error || 'Error loading', 'error') }
   }
 
   const handleSave = async (e) => {
@@ -27,7 +27,7 @@ export default function AdminServices() {
       else { await adminAPI.createService(form); showToast('Service created!') }
       refreshSite()
       setShowModal(false); setForm(defaultForm); setEditing(null); fetchData()
-    } catch { showToast('Error saving service', 'error') }
+    } catch (err) { showToast(err?.response?.data?.error || 'Error saving service', 'error') }
     setLoading(false)
   }
 
@@ -35,7 +35,7 @@ export default function AdminServices() {
   const handleDelete = async (item) => {
     if (!confirm('Delete this service?')) return
     try { await adminAPI.deleteService(item.id); showToast('Service deleted!'); refreshSite(); fetchData() }
-    catch { showToast('Error deleting service', 'error') }
+    catch (err) { showToast(err?.response?.data?.error || 'Error deleting service', 'error') }
   }
 
   const columns = [

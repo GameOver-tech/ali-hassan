@@ -119,6 +119,12 @@ export const adminAPI = {
   updateAIProviderApiKey: (id, api_key) => api.put(`/admin/ai-providers/${id}/api-key`, { api_key }),
   deleteAIProvider: (id) => api.delete(`/admin/ai-providers/${id}`),
 
+  // Testimonials
+  getTestimonials: (params) => api.get('/admin/testimonials', { params }).then(extractData),
+  createTestimonial: (data) => api.post('/admin/testimonials', data),
+  updateTestimonial: (id, data) => api.put(`/admin/testimonials/${id}`, data),
+  deleteTestimonial: (id) => api.delete(`/admin/testimonials/${id}`),
+
   // Experience
   getExperience: () => api.get('/admin/experience').then(extractData),
   createExperience: (data) => api.post('/admin/experience', data),

@@ -14,7 +14,7 @@ export default function AdminEducation() {
   useEffect(() => { fetchData() }, [])
 
   const fetchData = async () => {
-    try { const data = await adminAPI.getEducation(); setItems(data || []) } catch {}
+    try { const data = await adminAPI.getEducation(); setItems(data || []) } catch (err) { showToast(err?.response?.data?.error || 'Error loading', 'error') }
   }
 
   const handleSave = async (e) => {
@@ -26,14 +26,14 @@ export default function AdminEducation() {
       refreshSite(); setShowModal(false); setEditing(null)
       setForm({ degree: '', institution: '', year: '', description: '', status: 'active', order: 0 })
       fetchData()
-    } catch { showToast('Error saving', 'error') }
+    } catch (err) { showToast(err?.response?.data?.error || 'Error saving', 'error') }
     setLoading(false)
   }
 
   const handleEdit = (item) => { setForm(item); setEditing(item); setShowModal(true) }
   const handleDelete = async (item) => {
     if (!confirm('Delete this education entry?')) return
-    try { await adminAPI.deleteEducation(item.id); showToast('Deleted!'); refreshSite(); fetchData() } catch { showToast('Error deleting', 'error') }
+    try { await adminAPI.deleteEducation(item.id); showToast('Deleted!'); refreshSite(); fetchData() } catch (err) { showToast(err?.response?.data?.error || 'Error deleting', 'error') }
   }
 
   const columns = [

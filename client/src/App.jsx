@@ -32,6 +32,7 @@ const AdminSocialLinks = lazy(() => import('./admin/pages/SocialLinks'))
 const AdminChatbot = lazy(() => import('./admin/pages/Chatbot'))
 const AdminSEO = lazy(() => import('./admin/pages/SEO'))
 const AdminStats = lazy(() => import('./admin/pages/Stats'))
+const AdminTestimonials = lazy(() => import('./admin/pages/Testimonials'))
 const AdminAIProviders = lazy(() => import('./admin/pages/AIProviders'))
 const AdminExperience = lazy(() => import('./admin/pages/Experience'))
 const AdminEducation = lazy(() => import('./admin/pages/Education'))
@@ -144,6 +145,7 @@ export default function App() {
           <Route path="categories" element={<Suspense fallback={<AdminPageLoader />}><AdminCategories /></Suspense>} />
           <Route path="skills" element={<Suspense fallback={<AdminPageLoader />}><AdminSkills /></Suspense>} />
           <Route path="team" element={<Suspense fallback={<AdminPageLoader />}><AdminTeam /></Suspense>} />
+          <Route path="testimonials" element={<Suspense fallback={<AdminPageLoader />}><AdminTestimonials /></Suspense>} />
           <Route path="messages" element={<Suspense fallback={<AdminPageLoader />}><AdminMessages /></Suspense>} />
           <Route path="newsletter" element={<Suspense fallback={<AdminPageLoader />}><AdminNewsletter /></Suspense>} />
           <Route path="settings" element={<Suspense fallback={<AdminPageLoader />}><AdminSettings /></Suspense>} />

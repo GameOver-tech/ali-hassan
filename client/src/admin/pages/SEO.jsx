@@ -10,7 +10,7 @@ export default function AdminSEO() {
   useEffect(() => {
     adminAPI.getSEO().then((res) => {
       if (res.data) setForm(prev => ({ ...prev, ...res.data }))
-    }).catch(() => {})
+    }).catch((err) => showToast(err?.response?.data?.error || 'Error loading', 'error'))
   }, [])
 
   const handleSave = async (e) => {
@@ -20,8 +20,8 @@ export default function AdminSEO() {
       await adminAPI.updateSEO({ id: form.id || undefined, ...form })
       showToast('SEO settings saved!')
       refreshSite()
-    } catch {
-      showToast('Error saving SEO settings', 'error')
+    } catch (err) {
+      showToast(err?.response?.data?.error || 'Error saving SEO settings', 'error')
     }
     setLoading(false)
   }

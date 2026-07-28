@@ -86,7 +86,7 @@ export default function AdminSettings() {
       showToast('Settings saved!')
       refreshSite()
     } catch (err) {
-      showToast('Error saving settings', 'error')
+      showToast(err?.response?.data?.error || 'Error saving settings', 'error')
     } finally { setLoading(false) }
   }
 

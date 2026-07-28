@@ -97,9 +97,7 @@ export const schemas = {
     software: z.string().max(500).optional(),
     thumbnail_url: z.string().max(1000).optional(),
     project_url: z.string().max(1000).optional(),
-    case_study_url: z.string().max(1000).optional(),
     github_url: z.string().max(1000).optional(),
-    pdf_url: z.string().max(1000).optional(),
     problem: z.string().max(5000).optional(),
     solution: z.string().max(5000).optional(),
     status: z.enum(['published', 'draft']).optional(),
@@ -236,6 +234,16 @@ export const schemas = {
     status: z.enum(['active', 'inactive']).optional(),
     priority: z.number().int().optional(),
     is_default: z.boolean().optional(),
+  }),
+
+  testimonial: z.object({
+    name: z.string().min(1, 'Name is required').max(200),
+    role: z.string().max(200).optional(),
+    company: z.string().max(200).optional(),
+    content: z.string().max(5000).optional(),
+    rating: z.number().int().min(1).max(5).optional(),
+    photo_url: z.string().max(1000).optional(),
+    status: z.enum(['published', 'draft']).optional(),
   }),
 
   processStep: z.object({

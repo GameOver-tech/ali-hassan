@@ -16,7 +16,7 @@ export default function AdminStats() {
   useEffect(() => { fetchData() }, [])
 
   const fetchData = async () => {
-    try { const data = await adminAPI.getStats(); setStats(data) } catch {}
+    try { const data = await adminAPI.getStats(); setStats(data) } catch (err) { showToast(err?.response?.data?.error || 'Error loading', 'error') }
   }
 
   const handleSave = async (e) => {
@@ -27,7 +27,7 @@ export default function AdminStats() {
       else { await adminAPI.createStat(form) }
       showToast(editing ? 'Stat updated!' : 'Stat created!')
       refreshSite(); setShowModal(false); setForm(defaultForm); setEditing(null); fetchData()
-    } catch { showToast('Error saving stat', 'error') }
+    } catch (err) { showToast(err?.response?.data?.error || 'Error saving stat', 'error') }
     setLoading(false)
   }
 
@@ -35,7 +35,7 @@ export default function AdminStats() {
   const handleDelete = async (item) => {
     if (!confirm('Delete this stat?')) return
     try { await adminAPI.deleteStat(item.id); showToast('Stat deleted!'); refreshSite(); fetchData() }
-    catch { showToast('Error deleting stat', 'error') }
+    catch (err) { showToast(err?.response?.data?.error || 'Error deleting stat', 'error') }
   }
 
   const columns = [

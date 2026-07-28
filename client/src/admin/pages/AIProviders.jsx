@@ -29,7 +29,7 @@ export default function AdminAIProviders() {
     try {
       const data = await adminAPI.getAIProviders()
       setProviders(data || [])
-    } catch {}
+    } catch (err) { showToast(err?.response?.data?.error || 'Error loading providers', 'error') }
   }
 
   const handleSave = async (e) => {
@@ -54,7 +54,7 @@ export default function AdminAIProviders() {
       setEditing(null)
       setForm({ provider_name: '', api_key: '', model: '', status: 'active', priority: 1, is_default: false })
       fetchData()
-    } catch { showToast('Error saving provider', 'error') }
+    } catch (err) { showToast(err?.response?.data?.error || 'Error saving provider', 'error') }
     setLoading(false)
   }
 
@@ -79,7 +79,7 @@ export default function AdminAIProviders() {
       showToast('Provider deleted!')
       refreshSite()
       fetchData()
-    } catch { showToast('Error deleting provider', 'error') }
+    } catch (err) { showToast(err?.response?.data?.error || 'Error deleting provider', 'error') }
   }
 
   const handleProviderChange = (name) => {

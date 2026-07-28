@@ -14,7 +14,7 @@ export default function AdminProcess() {
   useEffect(() => { fetchData() }, [])
 
   const fetchData = async () => {
-    try { const data = await adminAPI.getProcessSteps(); setSteps(data) } catch {}
+    try { const data = await adminAPI.getProcessSteps(); setSteps(data) } catch (err) { showToast(err?.response?.data?.error || 'Error loading', 'error') }
   }
 
   const handleSave = async (e) => {
@@ -25,7 +25,7 @@ export default function AdminProcess() {
       if (editing) { await adminAPI.updateProcessStep(editing.id, payload); showToast('Step updated!') }
       else { await adminAPI.createProcessStep(payload); showToast('Step created!') }
       refreshSite(); setShowModal(false); setForm({ step: '', title: '', description: '', order: 0, active: true }); setEditing(null); fetchData()
-    } catch { showToast('Error saving step', 'error') }
+    } catch (err) { showToast(err?.response?.data?.error || 'Error saving step', 'error') }
     setLoading(false)
   }
 
@@ -33,7 +33,7 @@ export default function AdminProcess() {
   const handleDelete = async (item) => {
     if (!confirm('Delete this process step?')) return
     try { await adminAPI.deleteProcessStep(item.id); showToast('Step deleted!'); refreshSite(); fetchData() }
-    catch { showToast('Error deleting step', 'error') }
+    catch (err) { showToast(err?.response?.data?.error || 'Error deleting step', 'error') }
   }
 
   const columns = [

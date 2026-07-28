@@ -273,6 +273,14 @@ router.put('/stats/:id', ...updateRoute('stats', schemas.stat))
 router.delete('/stats/:id', deleteRoute('stats'))
 
 // ──────────────────────────────────────
+// Testimonials
+// ──────────────────────────────────────
+router.get('/testimonials', listRoute('testimonials', 'created_at', { ascending: false }))
+router.post('/testimonials', ...createRoute('testimonials', schemas.testimonial))
+router.put('/testimonials/:id', ...updateRoute('testimonials', schemas.testimonial))
+router.delete('/testimonials/:id', deleteRoute('testimonials'))
+
+// ──────────────────────────────────────
 // Experience
 // ──────────────────────────────────────
 router.get('/experience', listRoute('experience', 'order', { ascending: true }))

@@ -9,7 +9,7 @@ export default function AdminMessages() {
   useEffect(() => {
     adminAPI.getMessages().then(data => {
       if (data) setMessages(data)
-    }).catch(() => {})
+    }).catch((err) => showToast(err?.response?.data?.error || 'Error loading', 'error'))
   }, [])
 
   const handleDelete = async (item) => {
@@ -19,7 +19,7 @@ export default function AdminMessages() {
       setMessages(messages.filter((m) => m.id !== item.id))
       showToast('Message deleted!')
     } catch (err) {
-      showToast('Error deleting message', 'error')
+      showToast(err?.response?.data?.error || 'Error deleting message', 'error')
     }
   }
 

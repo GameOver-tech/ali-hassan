@@ -11,7 +11,7 @@ export default function AdminCategories() {
   useEffect(() => { fetchData() }, [])
 
   const fetchData = async () => {
-    try { const data = await adminAPI.getCategories(); setCategories(data) } catch {}
+    try { const data = await adminAPI.getCategories(); setCategories(data) } catch (err) { showToast(err?.response?.data?.error || 'Error loading', 'error') }
   }
 
   const handleAdd = async (e) => {
@@ -25,7 +25,7 @@ export default function AdminCategories() {
       setName('')
       fetchData()
     } catch (err) {
-      showToast('Error adding category', 'error')
+      showToast(err?.response?.data?.error || 'Error adding category', 'error')
     }
     setLoading(false)
   }
@@ -38,7 +38,7 @@ export default function AdminCategories() {
       refreshSite()
       fetchData()
     } catch (err) {
-      showToast('Error deleting category', 'error')
+      showToast(err?.response?.data?.error || 'Error deleting category', 'error')
     }
   }
 

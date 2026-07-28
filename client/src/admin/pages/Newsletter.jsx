@@ -9,7 +9,7 @@ export default function AdminNewsletter() {
   useEffect(() => {
     adminAPI.getNewsletter().then(data => {
       if (data) setSubscribers(data)
-    }).catch(() => {})
+    }).catch((err) => showToast(err?.response?.data?.error || 'Error loading', 'error'))
   }, [])
 
   const handleDelete = async (item) => {
@@ -18,8 +18,8 @@ export default function AdminNewsletter() {
       await adminAPI.deleteNewsletter(item.id)
       setSubscribers(subscribers.filter((s) => s.id !== item.id))
       showToast('Subscriber deleted!')
-    } catch {
-      showToast('Error deleting subscriber', 'error')
+    } catch (err) {
+      showToast(err?.response?.data?.error || 'Error deleting subscriber', 'error')
     }
   }
 

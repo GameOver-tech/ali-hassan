@@ -14,7 +14,7 @@ export default function AdminTeam() {
   useEffect(() => { fetchData() }, [])
 
   const fetchData = async () => {
-    try { const data = await adminAPI.getTeam(); setTeam(data) } catch {}
+    try { const data = await adminAPI.getTeam(); setTeam(data) } catch (err) { showToast(err?.response?.data?.error || 'Error loading', 'error') }
   }
 
   const handleSave = async (e) => {
@@ -24,7 +24,7 @@ export default function AdminTeam() {
       if (editing) { await adminAPI.updateTeam(editing.id, form); showToast('Member updated!') }
       else { await adminAPI.createTeam(form); showToast('Member added!') }
       refreshSite(); setShowModal(false); setEditing(null); fetchData()
-    } catch { showToast('Error saving team member', 'error') }
+    } catch (err) { showToast(err?.response?.data?.error || 'Error saving team member', 'error') }
     setLoading(false)
   }
 
@@ -32,7 +32,7 @@ export default function AdminTeam() {
   const handleDelete = async (item) => {
     if (!confirm('Delete this team member?')) return
     try { await adminAPI.deleteTeam(item.id); showToast('Member deleted!'); refreshSite(); fetchData() }
-    catch { showToast('Error deleting member', 'error') }
+    catch (err) { showToast(err?.response?.data?.error || 'Error deleting member', 'error') }
   }
 
   const columns = [

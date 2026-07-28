@@ -54,7 +54,7 @@ export default function AdminHero() {
       showToast('Hero section saved!')
       refreshSite()
     } catch (err) {
-      showToast('Error saving hero section', 'error')
+      showToast(err?.response?.data?.error || 'Error saving hero section', 'error')
       console.error('Hero save error:', err)
     } finally {
       setLoading(false)
