@@ -15,7 +15,7 @@ const TOOLS = [
     function: {
       name: 'get_portfolio_projects',
       description: 'Fetch published portfolio projects with descriptions, categories, clients, tech stacks, and URLs.',
-      parameters: { type: 'object', properties: { category: { type: 'string', description: 'Optional category filter.' } } },
+      parameters: { type: 'object', properties: { category: { type: ['string', 'null'], description: 'Optional category filter. Pass null or omit to get all categories.' } } },
     },
   },
   {

@@ -8,7 +8,12 @@ const PROVIDER_ENDPOINTS = {
 
 // Groq retired `llama-3.3-70b-versatile` on 2026-08-16.
 // `openai/gpt-oss-120b` is Groq's recommended replacement and supports tool use.
-export const DEFAULT_MODEL = 'openai/gpt-oss-120b'
+const PROVIDER_DEFAULT_MODEL = {
+  groq: 'openai/gpt-oss-120b',
+  gemini: 'gemini-2.0-flash',
+  openrouter: 'openai/gpt-4o-mini',
+}
+export const DEFAULT_MODEL = PROVIDER_DEFAULT_MODEL.groq
 
 // Env fallbacks — only used when the ai_providers row's api_key is empty.
 const ENV_KEY_FALLBACK = {
@@ -168,6 +173,7 @@ function parseGeminiResponse(data) {
 }
 
 function buildStandardPayload(messages, tools, model, maxTokens, temperature) {
+  const isGptOss = typeof model === 'string' && model.startsWith('openai/gpt-oss')
   return {
     model,
     messages: messages.map(m => {
@@ -177,6 +183,7 @@ function buildStandardPayload(messages, tools, model, maxTokens, temperature) {
       return msg
     }),
     ...(tools?.length ? { tools } : {}),
+    ...(isGptOss ? { reasoning_effort: 'low' } : {}),
     temperature: temperature ?? 0.4,
     max_tokens: maxTokens ?? 600,
   }
@@ -194,7 +201,7 @@ export async function chatWithProvider(provider, messages, tools, model, maxToke
     throw err
   }
 
-  const actualModel = provider.model || model || DEFAULT_MODEL
+  const actualModel = provider.model || model || PROVIDER_DEFAULT_MODEL[provider.provider_name] || DEFAULT_MODEL
 
   if (provider.provider_name === 'gemini') {
     const url = `${endpoint}/${actualModel}:generateContent?key=${apiKey}`
@@ -232,40 +239,55 @@ export async function chatWithProvider(provider, messages, tools, model, maxToke
     headers['HTTP-Referer'] = process.env.VITE_APP_URL || 'https://portfolio.vercel.app'
   }
 
-  const payload = buildStandardPayload(messages, tools, actualModel, maxTokens, temperature)
-  console.log(`[ai] -> ${provider.provider_name} model=${actualModel} payload bytes=${JSON.stringify(payload).length} tools=${tools?.length || 0}`)
-  console.log('[ai] messages:', summarizeMessages(messages))
-  // For deep debugging only (may be large):
-  // console.log('[ai] payload:', JSON.stringify(payload).slice(0, 4000))
+  const providerDefault = PROVIDER_DEFAULT_MODEL[provider.provider_name]
+  const candidates = [actualModel]
+  if (providerDefault && providerDefault !== actualModel) candidates.push(providerDefault)
 
-  let res
-  try {
-    res = await fetchWithTimeout(endpoint, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify(payload),
-    })
-  } catch (e) {
-    const err = new Error(`[${provider.provider_name}] ${e.name === 'AbortError' ? 'TIMEOUT' : 'NETWORK_ERROR'}: ${e.message}`)
-    err.code = e.name === 'AbortError' ? 'TIMEOUT' : 'NETWORK_ERROR'
-    err.provider = provider.provider_name
-    throw err
+  let lastErr = null
+
+  for (let i = 0; i < candidates.length; i++) {
+    const useModel = candidates[i]
+    const payload = buildStandardPayload(messages, tools, useModel, maxTokens, temperature)
+    console.log(`[ai] -> ${provider.provider_name} model=${useModel} payload bytes=${JSON.stringify(payload).length} tools=${tools?.length || 0}`)
+    console.log('[ai] messages:', summarizeMessages(messages))
+
+    let res
+    try {
+      res = await fetchWithTimeout(endpoint, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(payload),
+      })
+    } catch (e) {
+      const err = new Error(`[${provider.provider_name}] ${e.name === 'AbortError' ? 'TIMEOUT' : 'NETWORK_ERROR'}: ${e.message}`)
+      err.code = e.name === 'AbortError' ? 'TIMEOUT' : 'NETWORK_ERROR'
+      err.provider = provider.provider_name
+      throw err
+    }
+
+    if (!res.ok) {
+      const { text, message } = await readErrorBody(res)
+      const err = buildHttpError(provider.provider_name, res, text, message)
+      // A retired/unknown model id is recoverable: fall back to the provider default.
+      if (err.code === 'MODEL_NOT_FOUND' && i < candidates.length - 1) {
+        console.warn(`[ai] ${provider.provider_name}: model "${useModel}" not found; retrying with "${candidates[i + 1]}"`)
+        lastErr = err
+        continue
+      }
+      throw err
+    }
+
+    const data = await res.json()
+    const choice = data.choices?.[0]
+    if (!choice) return null
+
+    return {
+      content: choice.message?.content || null,
+      tool_calls: choice.message?.tool_calls || null,
+    }
   }
 
-  if (!res.ok) {
-    const { text, message } = await readErrorBody(res)
-    throw buildHttpError(provider.provider_name, res, text, message)
-  }
-
-  const data = await res.json()
-
-  const choice = data.choices?.[0]
-  if (!choice) return null
-
-  return {
-    content: choice.message?.content || null,
-    tool_calls: choice.message?.tool_calls || null,
-  }
+  throw lastErr || new Error(`[${provider.provider_name}] no response`)
 }
 
 export async function chatWithFallback(messages, tools, preferredModel, maxTokens, temperature) {
