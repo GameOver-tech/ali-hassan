@@ -118,6 +118,7 @@ export const adminAPI = {
   updateAIProvider: (id, data) => api.put(`/admin/ai-providers/${id}`, data),
   updateAIProviderApiKey: (id, api_key) => api.put(`/admin/ai-providers/${id}/api-key`, { api_key }),
   deleteAIProvider: (id) => api.delete(`/admin/ai-providers/${id}`),
+  diagnoseAI: () => api.get('/admin/ai-diagnose'),
 
   // Testimonials
   getTestimonials: (params) => api.get('/admin/testimonials', { params }).then(extractData),
@@ -169,7 +170,7 @@ export const adminAPI = {
   subscribe: (email) => api.post('/newsletter', { email }),
 
   // Chatbot
-  chat: (message) => api.post('/chat', { message }),
+  chat: (message) => api.post('/chat', { message }, { timeout: 30000 }),
 }
 
 export default api

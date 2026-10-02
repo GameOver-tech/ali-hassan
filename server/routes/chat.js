@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { supabaseAnon } from '../supabase/client.js'
-import { chatWithFallback } from '../services/ai-client.js'
+import { chatWithFallback, DEFAULT_MODEL } from '../services/ai-client.js'
 import { validate, schemas } from '../middleware/validate.js'
 
 const router = Router()
@@ -108,6 +108,22 @@ function getLocalAnswer(message) {
   return null
 }
 
+function logToolResult(name, payload) {
+  console.log(`[chat] tool ${name}: ${payload.length} chars`)
+  console.log(`[chat] tool ${name} payload:`, payload.slice(0, 2000))
+}
+
+function withDeadline(promise, ms, label) {
+  return Promise.race([
+    promise,
+    new Promise((_, reject) => setTimeout(() => {
+      const e = new Error(`[${label}] DEADLINE_EXCEEDED after ${ms}ms`)
+      e.code = 'DEADLINE'
+      reject(e)
+    }, ms)),
+  ])
+}
+
 router.post('/', validate(schemas.chat), async (req, res) => {
   try {
     const { message } = req.body
@@ -122,9 +138,12 @@ router.post('/', validate(schemas.chat), async (req, res) => {
       .maybeSingle()
       .then(r => r.data || {})
 
-    const model = chatbotCfg.model || 'llama-3.3-70b-versatile'
+    const model = chatbotCfg.model || DEFAULT_MODEL
     const temperature = chatbotCfg.temperature ?? 0.4
     const maxTokens = chatbotCfg.max_tokens || 600
+
+    console.log('[chat] config:', { model, temperature, maxTokens, cfgModel: chatbotCfg.model || null })
+    console.log(`[chat] message: ${message.length} chars`)
 
     const conversation = [
       {
@@ -163,7 +182,7 @@ RULES:
       { role: 'user', content: message },
     ]
 
-    const providerResult = await chatWithFallback(conversation, TOOLS, model, maxTokens, temperature)
+    const providerResult = await withDeadline(chatWithFallback(conversation, TOOLS, model, maxTokens, temperature), 25000, 'chat')
     if (!providerResult) {
       return res.json({ reply: `Please email ${REAL_EMAIL} and Ali will respond promptly.` })
     }
@@ -187,10 +206,11 @@ RULES:
         try { fnArgs = toolCall.function.arguments ? JSON.parse(toolCall.function.arguments) : {} } catch {}
         const executor = toolExecutors[toolCall.function.name]
         const toolResult = executor ? await executor(fnArgs) : JSON.stringify({ error: `Unknown tool: ${toolCall.function.name}` })
+        logToolResult(toolCall.function.name, toolResult)
         conversation.push({ role: 'tool', tool_call_id: toolCall.id, content: toolResult })
       }
 
-      const finalResult = await chatWithFallback(conversation, null, model, maxTokens, temperature)
+      const finalResult = await withDeadline(chatWithFallback(conversation, null, model, maxTokens, temperature), 25000, 'chat-followup')
       const reply = finalResult?.result?.content
       if (reply) return res.json({ reply })
     }
@@ -200,9 +220,14 @@ RULES:
 
     res.json({ reply: `Please email ${REAL_EMAIL} and Ali will be happy to help!` })
   } catch (error) {
-    console.error('Chat error:', error.message)
+    const code = error.code || 'UNKNOWN'
+    console.error(`[chat] FAILED code=${code} status=${error.status || '-'} provider=${error.provider || '-'} msg=${error.message}`)
+    if (error.body) console.error('[chat] upstream body:', error.body)
+
     const fallback = getLocalAnswer(req.body?.message || '')
-    res.json({ reply: fallback || `Please email ${REAL_EMAIL} and Ali will be happy to help!` })
+    const payload = { reply: fallback || `Please email ${REAL_EMAIL} and Ali will be happy to help!` }
+    if (process.env.CHAT_DEBUG === '1') payload.debug = { code, status: error.status || null, message: error.message }
+    res.json(payload)
   }
 })
 

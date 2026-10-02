@@ -2,6 +2,7 @@ import { Router } from 'express'
 import { supabase } from '../supabase/client.js'
 import { verifyToken, requireAdmin } from '../middleware/auth.js'
 import { validate, schemas } from '../middleware/validate.js'
+import { diagnoseProviders } from '../services/ai-client.js'
 import multer from 'multer'
 import { uploadFile, ensureBucket } from '../services/upload.js'
 
@@ -385,5 +386,15 @@ router.put('/ai-providers/:id', validate(schemas.aiProvider), async (req, res) =
 })
 
 router.delete('/ai-providers/:id', deleteRoute('ai_providers'))
+
+// Live provider diagnostic — reports configured models/keys and pings each provider.
+router.get('/ai-diagnose', async (req, res) => {
+  try {
+    const results = await diagnoseProviders()
+    res.json({ results })
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
+})
 
 export default router

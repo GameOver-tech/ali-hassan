@@ -11,7 +11,7 @@ const PROVIDERS = [
 ]
 
 const SUGGESTED_MODELS = {
-  groq: 'llama-3.3-70b-versatile',
+  groq: 'openai/gpt-oss-120b',
   gemini: 'gemini-2.0-flash',
   openrouter: 'openai/gpt-4o-mini',
 }

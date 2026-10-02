@@ -3,6 +3,12 @@ import { adminAPI } from '../../services/api'
 import { showToast } from '../../components/ui/Toast'
 import { refreshSite } from '../../utils/refresh'
 
+const MODEL_OPTIONS = [
+  { value: 'openai/gpt-oss-120b', label: 'GPT-OSS 120B (recommended)' },
+  { value: 'openai/gpt-oss-20b', label: 'GPT-OSS 20B (fast)' },
+  { value: 'qwen/qwen3.8-27b', label: 'Qwen 3.8 27B' },
+]
+
 export default function AdminChatbot() {
   const [form, setForm] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -10,7 +16,7 @@ export default function AdminChatbot() {
   const defaults = {
     greeting: '👋 Hi! I\'m Ali\'s AI assistant. Ask me about his work or how to get started!',
     system_prompt: '',
-    model: 'llama-3.3-70b-versatile',
+    model: 'openai/gpt-oss-120b',
     temperature: 0.7,
     max_tokens: 500,
     enabled: true
@@ -74,9 +80,10 @@ export default function AdminChatbot() {
         <textarea value={form.system_prompt} onChange={(e) => setForm({ ...form, system_prompt: e.target.value })} placeholder="System prompt (instructions for the AI)" rows={6} className={`${inputClass} resize-none`} />
         <div className="grid grid-cols-3 gap-4">
           <select value={form.model} onChange={(e) => setForm({ ...form, model: e.target.value })} className={inputClass}>
-            <option value="llama-3.3-70b-versatile">Llama 3.3 70B</option>
-            <option value="mixtral-8x7b-32768">Mixtral 8x7B</option>
-            <option value="gemma2-9b-it">Gemma 2 9B</option>
+            {form.model && !MODEL_OPTIONS.some(m => m.value === form.model) && (
+              <option value={form.model}>{form.model} (unlisted)</option>
+            )}
+            {MODEL_OPTIONS.map(m => <option key={m.value} value={m.value}>{m.label}</option>)}
           </select>
           <div>
             <label className="block text-xs text-text-muted mb-1">Temperature: {form.temperature}</label>

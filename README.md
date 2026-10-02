@@ -8,7 +8,7 @@ A world-class, production-ready portfolio website for a professional Graphic Des
 
 **Backend:** Express.js (Vercel Serverless Functions), Supabase (Database + Auth)
 
-**AI:** Groq API (Mixtral 8x7B) for chatbot
+**AI:** Multi-provider chatbot (Groq `openai/gpt-oss-120b`, Google Gemini, OpenRouter) with automatic failover
 
 **Hosting:** Vercel (frontend + serverless functions), Supabase (database)
 
@@ -83,7 +83,8 @@ VITE_SUPABASE_URL=your_project_url
 VITE_SUPABASE_ANON_KEY=your_anon_key
 VITE_SUPABASE_SERVICE_ROLE=your_service_role_key
 
-# Groq API Key (for chatbot)
+# AI provider key (optional fallback — primary source is the ai_providers table,
+# edited via Admin → AI Providers)
 GROQ_API_KEY=your_groq_api_key
 
 # JWT Secret

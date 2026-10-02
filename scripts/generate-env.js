@@ -12,6 +12,13 @@ const pairs = [
   ['VITE_SUPABASE_ANON_KEY', 'SUPABASE_ANON_KEY'],
   ['VITE_SUPABASE_SERVICE_ROLE', 'SUPABASE_SERVICE_ROLE'],
   ['JWT_SECRET', 'JWT_SECRET'],
+  // AI provider keys (optional fallback — DB ai_providers.api_key takes priority)
+  ['GROQ_API_KEY', 'GROQ_API_KEY'],
+  ['GEMINI_API_KEY', 'GEMINI_API_KEY'],
+  ['OPENROUTER_API_KEY', 'OPENROUTER_API_KEY'],
+  ['VITE_GROQ_API_KEY', 'GROQ_API_KEY'],
+  ['VITE_GEMINI_API_KEY', 'GEMINI_API_KEY'],
+  ['VITE_OPENROUTER_API_KEY', 'OPENROUTER_API_KEY'],
 ]
 
 const lines = []

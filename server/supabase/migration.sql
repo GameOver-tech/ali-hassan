@@ -319,7 +319,7 @@ CREATE TABLE IF NOT EXISTS public.chatbot_config (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     greeting TEXT DEFAULT '👋 Hi! How can I help you today?',
     system_prompt TEXT,
-    model TEXT DEFAULT 'llama-3.3-70b-versatile',
+    model TEXT DEFAULT 'openai/gpt-oss-120b',
     temperature REAL DEFAULT 0.7,
     max_tokens INTEGER DEFAULT 500,
     enabled BOOLEAN DEFAULT true,
@@ -342,7 +342,7 @@ CREATE TABLE IF NOT EXISTS public.ai_providers (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     provider_name TEXT NOT NULL UNIQUE,
     api_key TEXT NOT NULL,
-    model TEXT NOT NULL DEFAULT 'llama-3.3-70b-versatile',
+    model TEXT NOT NULL DEFAULT 'openai/gpt-oss-120b',
     status TEXT DEFAULT 'active' CHECK (status IN ('active', 'inactive')),
     priority INTEGER DEFAULT 0,
     is_default BOOLEAN DEFAULT false,
@@ -784,7 +784,7 @@ ON CONFLICT DO NOTHING;
 
 -- Insert default AI providers
 INSERT INTO public.ai_providers (provider_name, api_key, model, status, priority, is_default) VALUES
-  ('groq', '', 'llama-3.3-70b-versatile', 'active', 1, true),
+  ('groq', '', 'openai/gpt-oss-120b', 'active', 1, true),
   ('gemini', '', 'gemini-2.0-flash', 'active', 2, false),
   ('openrouter', '', 'openai/gpt-4o-mini', 'inactive', 3, false)
 ON CONFLICT (provider_name) DO NOTHING;
